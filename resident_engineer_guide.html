@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Engineer Visual Guide - IRICEN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .pattern-grid {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-blue-900 text-white p-6 shadow-lg">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">Resident Engineer Field Guide</h1>
+            <p class="text-blue-200 mt-2">IRICEN Site Reference • Hardware & Networking Basics</p>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4 space-y-8">
+
+        <!-- SECTION 1: THE NETWORK RACK -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6 border-b border-slate-100 bg-slate-50">
+                <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    1. The Network Rack (The Cabinet)
+                </h2>
+                <p class="text-slate-600 mt-1">You will see this glass cabinet in the server room. It contains two main parts.</p>
+            </div>
+            
+            <div class="p-6 grid md:grid-cols-2 gap-8 items-center">
+                <!-- Diagram -->
+                <div class="bg-slate-900 rounded-lg p-6 shadow-inner relative">
+                    <!-- Label: Patch Panel -->
+                    <div class="absolute top-4 left-4 text-xs font-mono text-slate-400">A. PATCH PANEL (Passive/No Lights)</div>
+                    <div class="mt-6 mb-2 bg-slate-700 h-12 rounded border border-slate-600 flex items-center justify-around px-2">
+                        <!-- Ports -->
+                        <div class="w-3 h-4 bg-slate-800 border border-slate-600"></div>
+                        <div class="w-3 h-4 bg-slate-800 border border-slate-600"></div>
+                        <div class="w-3 h-4 bg-slate-800 border border-slate-600"></div>
+                        <div class="w-3 h-4 bg-slate-800 border border-slate-600"></div>
+                        <div class="w-3 h-4 bg-slate-800 border border-slate-600"></div>
+                        <div class="w-3 h-4 bg-slate-800 border border-slate-600"></div>
+                        <div class="w-3 h-4 bg-slate-800 border border-slate-600"></div>
+                        <div class="w-3 h-4 bg-slate-800 border border-slate-600"></div>
+                    </div>
+
+                    <!-- Cables connecting down -->
+                    <div class="h-12 w-full flex justify-around px-4 opacity-50">
+                         <div class="w-1 h-full bg-yellow-500"></div>
+                         <div class="w-1 h-full bg-blue-500"></div>
+                         <div class="w-1 h-full bg-blue-500"></div>
+                         <div class="w-1 h-full bg-yellow-500"></div>
+                    </div>
+
+                    <!-- Label: Switch -->
+                    <div class="absolute bottom-16 left-4 text-xs font-mono text-green-400">B. NETWORK SWITCH (Active/Blinking)</div>
+                    <div class="bg-slate-800 h-14 rounded border border-slate-600 flex items-center justify-around px-2 relative z-10">
+                        <!-- Switch Ports with Lights -->
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-3 h-3 bg-black border border-slate-600"></div>
+                            <div class="w-1 h-1 bg-green-500 rounded-full animate-pulse shadow-[0_0_5px_#22c55e]"></div>
+                        </div>
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-3 h-3 bg-black border border-slate-600"></div>
+                            <div class="w-1 h-1 bg-green-500 rounded-full animate-pulse shadow-[0_0_5px_#22c55e]"></div>
+                        </div>
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-3 h-3 bg-black border border-slate-600"></div>
+                            <div class="w-1 h-1 bg-green-500 rounded-full animate-pulse shadow-[0_0_5px_#22c55e]"></div>
+                        </div>
+                         <div class="flex flex-col items-center gap-1">
+                            <div class="w-3 h-3 bg-black border border-slate-600"></div>
+                            <div class="w-1 h-1 bg-orange-500 rounded-full shadow-[0_0_5px_#f97316]"></div> <!-- Error light -->
+                        </div>
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-3 h-3 bg-black border border-slate-600"></div>
+                            <div class="w-1 h-1 bg-green-500 rounded-full animate-pulse shadow-[0_0_5px_#22c55e]"></div>
+                        </div>
+                        <div class="flex flex-col items-center gap-1">
+                            <div class="w-3 h-3 bg-black border border-slate-600"></div>
+                            <div class="w-1 h-1 bg-slate-900 rounded-full"></div> <!-- Off -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation -->
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-bold text-slate-800">A. The Patch Panel</h3>
+                        <p class="text-sm text-slate-600">This is just a connector. Cables from the office walls end here. It has <span class="font-bold text-red-500">NO electricity</span> and no lights.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800">B. The Network Switch</h3>
+                        <p class="text-sm text-slate-600">This is the brain. It has power and <span class="font-bold text-green-600">blinking lights</span>.</p>
+                        <ul class="mt-2 text-sm space-y-1">
+                            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500"></span> <strong>Blinking Green:</strong> Good! Traffic is flowing.</li>
+                            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-orange-500"></span> <strong>Solid Orange:</strong> Warning (Speed mismatch or loop).</li>
+                            <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-slate-400"></span> <strong>Off:</strong> Cable unplugged or dead port.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: CABLES & PORTS -->
+        <section class="grid md:grid-cols-2 gap-6">
+            
+            <!-- RJ45 CARD -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <span class="bg-blue-100 text-blue-700 py-1 px-2 rounded text-xs font-bold">INTERNET</span>
+                    Ethernet (RJ45)
+                </h3>
+                <div class="flex justify-center py-6 bg-slate-50 rounded-lg border border-slate-100 mb-4">
+                    <!-- SVG RJ45 -->
+                    <svg width="120" height="80" viewBox="0 0 120 80">
+                        <!-- Wire -->
+                        <rect x="0" y="25" width="40" height="30" fill="#3b82f6" rx="4" />
+                        <!-- Head Body -->
+                        <rect x="40" y="20" width="60" height="40" fill="transparent" stroke="#94a3b8" stroke-width="2" rx="2" />
+                        <rect x="40" y="20" width="60" height="40" fill="rgba(255,255,255,0.5)" />
+                        <!-- The Clip (Important!) -->
+                        <path d="M50 20 L50 10 L90 15 L90 20" fill="none" stroke="#94a3b8" stroke-width="2" />
+                        <!-- Pins -->
+                        <g fill="#eab308">
+                            <rect x="90" y="25" width="10" height="2" />
+                            <rect x="90" y="29" width="10" height="2" />
+                            <rect x="90" y="33" width="10" height="2" />
+                            <rect x="90" y="37" width="10" height="2" />
+                            <rect x="90" y="41" width="10" height="2" />
+                            <rect x="90" y="45" width="10" height="2" />
+                            <rect x="90" y="49" width="10" height="2" />
+                            <rect x="90" y="53" width="10" height="2" />
+                        </g>
+                    </svg>
+                </div>
+                <p class="text-sm text-slate-600 mb-2"><strong>The "Clip" is key.</strong> If this plastic tab on top is broken, the cable will fall out of the PC, causing random disconnects.</p>
+                <div class="text-xs bg-yellow-50 text-yellow-800 p-2 rounded border border-yellow-200">
+                    <strong>Tip:</strong> Always hear for the "Click" sound when plugging it in.
+                </div>
+            </div>
+
+            <!-- VIDEO PORTS CARD -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                <h3 class="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <span class="bg-purple-100 text-purple-700 py-1 px-2 rounded text-xs font-bold">DISPLAY</span>
+                    VGA vs HDMI
+                </h3>
+                <div class="flex justify-around py-6 bg-slate-50 rounded-lg border border-slate-100 mb-4 items-center">
+                    
+                    <!-- VGA -->
+                    <div class="text-center">
+                        <svg width="60" height="40" viewBox="0 0 60 40">
+                            <!-- Blue Body -->
+                            <path d="M5 10 L55 10 L50 35 L10 35 Z" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2" />
+                            <!-- Pins -->
+                            <circle cx="20" cy="18" r="1.5" fill="black" opacity="0.5"/>
+                            <circle cx="30" cy="18" r="1.5" fill="black" opacity="0.5"/>
+                            <circle cx="40" cy="18" r="1.5" fill="black" opacity="0.5"/>
+                            <circle cx="25" cy="26" r="1.5" fill="black" opacity="0.5"/>
+                            <circle cx="35" cy="26" r="1.5" fill="black" opacity="0.5"/>
+                        </svg>
+                        <p class="text-xs font-bold mt-2 text-blue-600">VGA (Old)</p>
+                    </div>
+
+                    <!-- HDMI -->
+                    <div class="text-center">
+                        <svg width="60" height="40" viewBox="0 0 60 40">
+                             <!-- Metal Body -->
+                            <path d="M10 10 L50 10 L50 25 L45 30 L15 30 L10 25 Z" fill="#cbd5e1" stroke="#64748b" stroke-width="2" />
+                            <!-- Inner Slot -->
+                            <rect x="15" y="15" width="30" height="5" fill="#334155" />
+                        </svg>
+                        <p class="text-xs font-bold mt-2 text-slate-600">HDMI (New)</p>
+                    </div>
+                </div>
+                <ul class="text-sm text-slate-600 space-y-2">
+                    <li><strong>VGA:</strong> Has screws. Must be tightened or colors (pink/yellow) appear. No Audio.</li>
+                    <li><strong>HDMI:</strong> Flat connector. Carries Audio + Video. Push in firmly.</li>
+                </ul>
+            </div>
+
+        </section>
+
+        <!-- SECTION 3: TOOLS -->
+        <section class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6 border-b border-slate-100">
+                <h2 class="text-xl font-bold text-slate-900">3. The Crimping Tool</h2>
+                <p class="text-slate-600 mt-1">You will use this to put new connectors on ethernet cables.</p>
+            </div>
+            <div class="p-6 flex flex-col md:flex-row items-center gap-6">
+                <div class="bg-slate-50 p-6 rounded-lg border border-slate-100">
+                     <svg width="150" height="150" viewBox="0 0 100 100">
+                        <!-- Left Handle -->
+                        <path d="M30 90 Q10 60 30 40 L40 50" fill="none" stroke="#ef4444" stroke-width="8" stroke-linecap="round" />
+                        <!-- Right Handle -->
+                        <path d="M70 90 Q90 60 70 40 L60 50" fill="none" stroke="#ef4444" stroke-width="8" stroke-linecap="round" />
+                        <!-- Jaws Head -->
+                        <rect x="35" y="10" width="30" height="40" fill="#334155" rx="2" />
+                        <!-- Crimp Hole -->
+                        <rect x="42" y="25" width="16" height="10" fill="#0f172a" />
+                        <!-- Hinge -->
+                        <circle cx="50" cy="50" r="5" fill="#94a3b8" />
+                    </svg>
+                </div>
+                <div class="flex-1 space-y-2">
+                    <p class="text-sm text-slate-700">This tool does three things:</p>
+                    <ol class="list-decimal list-inside text-sm text-slate-600 space-y-1">
+                        <li><strong>Cuts</strong> the wire.</li>
+                        <li><strong>Strips</strong> the blue outer plastic jacket.</li>
+                        <li><strong>Crimps</strong> (presses) the RJ45 plastic head onto the wires.</li>
+                    </ol>
+                    <p class="text-xs bg-blue-50 text-blue-800 p-2 rounded mt-2">
+                        <strong>Warning:</strong> Don't crimp too hard, or you crack the plastic clip. Don't crimp too soft, or the pins won't touch.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: COMMAND LINE SIMULATOR -->
+        <section class="bg-slate-900 rounded-xl shadow-lg overflow-hidden border border-slate-800">
+            <div class="bg-slate-800 px-4 py-2 flex gap-2 items-center border-b border-slate-700">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                <span class="text-xs text-slate-400 font-mono ml-2">Administrator: Command Prompt</span>
+            </div>
+            <div class="p-6 font-mono text-sm overflow-x-auto">
+                <div class="text-slate-300">Microsoft Windows [Version 10.0.19045]</div>
+                <div class="text-slate-300 mb-4">(c) Microsoft Corporation. All rights reserved.</div>
+
+                <div class="flex gap-2">
+                    <span class="text-slate-300">C:\Users\Admin></span>
+                    <span class="text-green-400 typing-effect">ipconfig</span>
+                </div>
+
+                <div class="mt-4 text-slate-300">
+                    <div>Windows IP Configuration</div>
+                    <br>
+                    <div>Ethernet adapter Ethernet:</div>
+                    <br>
+                    <div class="pl-4">Connection-specific DNS Suffix  . : iricen.local</div>
+                    <div class="pl-4 flex gap-4">
+                        <span>IPv4 Address. . . . . . . . . . . :</span>
+                        <span class="text-yellow-300 font-bold">192.168.1.45</span>
+                        <span class="text-slate-500"><-- This is GOOD</span>
+                    </div>
+                    <div class="pl-4">Subnet Mask . . . . . . . . . . . : 255.255.255.0</div>
+                    <div class="pl-4">Default Gateway . . . . . . . . . : 192.168.1.1</div>
+                </div>
+
+                <div class="mt-6 border-t border-slate-700 pt-4">
+                    <p class="text-red-400 mb-2">If you see this instead, the cable is unplugged:</p>
+                     <div class="pl-4 flex gap-4 text-slate-500">
+                        <span>IPv4 Address. . . . . . . . . . . :</span>
+                        <span class="text-red-400 font-bold">169.254.10.5</span>
+                        <span class="text-slate-400"><-- This is BAD (No Server Found)</span>
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex gap-2">
+                     <span class="text-slate-300">C:\Users\Admin></span>
+                     <span class="w-2 h-4 bg-slate-300 animate-pulse"></span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 text-slate-500 text-sm">
+        Generated for your first day at IRICEN • Good Luck!
+    </footer>
+
+</body>
+</html>
