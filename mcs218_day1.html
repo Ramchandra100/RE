@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCS-218: Data Transmission & Signals | Interactive Textbook</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MCS-218: Data Communication & Computer Networks | Day 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,655 +14,595 @@
 
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #0a0f1a 0%, #0f172a 100%);
-            color: #e2e8f0;
+            background: #f0f4f8;
+            color: #1a2a3a;
             line-height: 1.5;
             padding: 2rem 1.5rem;
         }
 
-        .textbook-container {
+        /* main textbook container */
+        .master-textbook {
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* Header */
-        .concept-header {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            border-radius: 1.5rem;
-            padding: 2rem 2rem;
+        /* header with mentorship branding */
+        .mentorship-header {
+            background: linear-gradient(135deg, #0b2b3b 0%, #1a4a5f 100%);
+            border-radius: 2rem 2rem 1.5rem 1.5rem;
+            padding: 1.8rem 2rem;
             margin-bottom: 2rem;
-            border: 1px solid #334155;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.3);
+            box-shadow: 0 12px 25px -10px rgba(0,0,0,0.2);
         }
-        .concept-header h1 {
-            font-size: 2.2rem;
+        .mentorship-header h1 {
+            font-size: 1.9rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #60a5fa, #a78bfa);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 0.5rem;
+            color: white;
+            letter-spacing: -0.3px;
         }
-        .concept-header .day-badge {
+        .mentorship-header h1 span {
+            font-weight: 500;
+            background: #f4c54230;
+            padding: 0.1rem 0.7rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            margin-left: 0.75rem;
+            vertical-align: middle;
+        }
+        .day-badge {
             display: inline-block;
-            background: #3b82f6;
-            padding: 0.25rem 0.75rem;
-            border-radius: 2rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+            background: #f4b942;
+            color: #1e2f3a;
+            font-weight: 700;
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
         }
-        .concept-header p {
-            color: #94a3b8;
+        .mentorship-header p {
+            color: #cbdbe6;
+            margin-top: 0.8rem;
             font-size: 1rem;
         }
 
-        /* Grid Layout */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Cards */
-        .card {
-            background: #0f172a;
-            border-radius: 1.5rem;
-            border: 1px solid #334155;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.4);
-        }
-        .card-header {
-            background: #1e293b;
-            padding: 1.2rem 1.5rem;
-            border-bottom: 2px solid #3b82f6;
-        }
-        .card-header h2 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .card-content {
-            padding: 1.5rem;
-        }
-
-        /* Transmission Mode Visualizer */
-        .mode-visualizer {
+        /* theory cards grid */
+        .topics-grid {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
-        .mode-item {
-            background: #1e293b;
-            border-radius: 1rem;
-            padding: 1rem;
-            cursor: pointer;
+
+        .topic-card {
+            background: white;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
             transition: all 0.2s;
-            border: 2px solid transparent;
+            border: 1px solid #e0e9f0;
         }
-        .mode-item.active {
-            border-color: #3b82f6;
-            background: #1e2a3a;
+
+        .topic-title {
+            background: #f9fbfd;
+            padding: 1.2rem 2rem;
+            border-bottom: 2px solid #e2edf2;
         }
-        .mode-item:hover {
-            background: #2d3a4e;
+        .topic-title h2 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #0f4c5c;
         }
-        .mode-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
+        .topic-title p {
+            color: #4a6272;
+            margin-top: 0.2rem;
+            font-size: 0.9rem;
         }
-        .mode-diagram {
+
+        .theory-body {
+            padding: 1.5rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.8rem;
+        }
+
+        .explain-text {
+            background: #fefefe;
+        }
+        .explain-text h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: #1e5a6e;
+            border-left: 4px solid #f4b942;
+            padding-left: 0.8rem;
+        }
+        .explain-text p, .explain-text li {
+            margin-bottom: 0.85rem;
+            color: #2c4253;
+        }
+        .explain-text ul, .explain-text ol {
+            padding-left: 1.5rem;
+            margin: 0.8rem 0;
+        }
+        .example-block {
+            background: #fef7e8;
+            border-radius: 1.2rem;
+            padding: 1rem 1.3rem;
+            margin: 1rem 0;
+            border-left: 4px solid #f4b942;
+        }
+
+        /* visual playground (interactive widgets) */
+        .playground {
+            background: #f8fafd;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            box-shadow: inset 0 0 0 1px #e4edf2, 0 4px 8px rgba(0,0,0,0.02);
+        }
+        .playground h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
             gap: 0.5rem;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
+            color: #1e5a6e;
         }
-        .device {
-            background: #0f172a;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
-            text-align: center;
-            border: 1px solid #475569;
-        }
-        .arrow {
-            font-size: 1.2rem;
-            flex: 1;
-            text-align: center;
-        }
-        .arrow-simplex { color: #60a5fa; }
-        .arrow-half { color: #f59e0b; }
-        .arrow-full { color: #10b981; }
-        .mode-desc {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-top: 0.5rem;
-        }
-
-        /* Signal Canvas */
-        .signal-canvas {
-            background: #0a0f14;
-            border-radius: 1rem;
+        .widget-container {
+            background: white;
+            border-radius: 1.2rem;
             padding: 1rem;
             margin-bottom: 1rem;
+            border: 1px solid #dce7ef;
         }
-        canvas {
-            background: #0a0f14;
-            border-radius: 0.5rem;
-            width: 100%;
-            height: auto;
-            border: 1px solid #334155;
-        }
-        .signal-controls {
+
+        /* transmission modes interactive */
+        .mode-selector {
             display: flex;
-            gap: 0.75rem;
-            margin-top: 1rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
+            margin-bottom: 1.5rem;
         }
-        .btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 2rem;
+        .mode-btn {
+            background: #eef3f7;
+            border: none;
+            padding: 0.6rem 1.3rem;
+            border-radius: 40px;
             font-weight: 600;
             font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.2s;
-            border: none;
             font-family: inherit;
+            color: #1e5a6e;
         }
-        .btn-primary {
-            background: #3b82f6;
+        .mode-btn.active {
+            background: #1e5a6e;
             color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        .btn-primary:hover {
-            background: #2563eb;
-            transform: scale(1.02);
-        }
-        .btn-secondary {
-            background: #475569;
-            color: white;
-        }
-        .btn-secondary:hover {
-            background: #334155;
-        }
-        .btn-success {
-            background: #10b981;
-            color: white;
-        }
-
-        /* Code Breakdown */
-        .code-breakdown {
-            background: #0f172a;
-            border-radius: 1.5rem;
-            border: 1px solid #334155;
-            margin: 1.5rem 0;
-            overflow: hidden;
-        }
-        .code-header {
-            background: #1e293b;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #334155;
-        }
-        .code-header h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        pre {
-            margin: 0;
-            padding: 1.5rem;
-            overflow-x: auto;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.8rem;
-            line-height: 1.6;
-            background: #0a0f14;
-            color: #e2e8f0;
-        }
-        .comment { color: #6b9e7c; }
-        .keyword { color: #f472b6; }
-        .string { color: #a3e635; }
-        .function { color: #7dd3fc; }
-
-        /* Exercise Section */
-        .exercise-card {
-            background: linear-gradient(135deg, #1e1b2e 0%, #0f172a 100%);
-            border: 1px solid #8b5cf6;
-        }
-        .question {
-            background: #1e293b;
+        .flow-diagram {
+            background: #f2f6f9;
             padding: 1rem;
             border-radius: 1rem;
-            margin-bottom: 1rem;
+            text-align: center;
+            font-family: monospace;
+            font-size: 1rem;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
-        .question p {
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-        .answer-input {
-            width: 100%;
-            padding: 0.75rem;
-            background: #0f172a;
-            border: 1px solid #475569;
-            border-radius: 0.75rem;
-            color: #e2e8f0;
-            font-family: inherit;
-            margin-bottom: 0.75rem;
-            resize: vertical;
-        }
-        .feedback {
-            font-size: 0.85rem;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
+        .signal-canvas {
+            background: #ffffff;
+            border-radius: 12px;
             margin-top: 0.5rem;
+            text-align: center;
         }
-        .feedback.correct {
-            background: #10b98120;
-            color: #6ee7b7;
-            border-left: 3px solid #10b981;
+        canvas {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            width: 100%;
+            height: auto;
+            border: 1px solid #d4e0e8;
         }
-        .feedback.incorrect {
-            background: #ef444420;
-            color: #fca5a5;
-            border-left: 3px solid #ef4444;
+        .signal-buttons {
+            display: flex;
+            gap: 0.8rem;
+            margin: 0.8rem 0;
+            justify-content: center;
+        }
+        .small-btn {
+            background: #eef3f7;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .multiplex-demo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        .mux-block {
+            background: #e9f0f5;
+            padding: 0.6rem;
+            border-radius: 12px;
+            text-align: center;
+            flex: 1;
+            min-width: 100px;
+        }
+        hr {
+            margin: 1rem 0;
+            border-color: #e2edf2;
         }
 
-        @media (max-width: 900px) {
-            .content-grid {
+        /* Q&A section */
+        .qa-section {
+            background: white;
+            border-radius: 1.8rem;
+            margin-top: 2rem;
+            padding: 1.8rem 2rem;
+            border: 1px solid #e0e9f0;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.03);
+        }
+        .qa-section h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #0f4c5c;
+            border-left: 5px solid #f4b942;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .qa-item {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e7edf3;
+            padding-bottom: 1.2rem;
+        }
+        .qa-question {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #1e5a6e;
+            margin-bottom: 0.6rem;
+        }
+        .qa-answer {
+            color: #2c4b5e;
+            padding-left: 1rem;
+            border-left: 3px solid #f4b94250;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #6f8ea0;
+        }
+
+        @media (max-width: 850px) {
+            .theory-body {
                 grid-template-columns: 1fr;
+                gap: 1rem;
             }
             body {
                 padding: 1rem;
             }
         }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: #64748b;
-            font-size: 0.8rem;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 2rem;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
     </style>
 </head>
 <body>
-<div class="textbook-container">
-    <!-- Header -->
-    <div class="concept-header">
-        <span class="day-badge">📡 DAY 1 | MCS-218</span>
-        <h1>Data Transmission Basics & Signal Theory</h1>
-        <p>Understanding how data flows: Transmission Modes • Analog vs. Digital Signals • Real-world applications</p>
+<div class="master-textbook">
+    <div class="mentorship-header">
+        <h1>📡 MCS-218: Data Communication & Computer Networks <span>Master Mentorship</span></h1>
+        <div class="day-badge">✨ Day 1 | Foundation Building</div>
+        <p>Data Transmission Basics • Analog vs Digital Signals • Multiplexing (FDM & TDM) — with interactive visual playgrounds</p>
     </div>
 
-    <div class="content-grid">
-        <!-- LEFT COLUMN: Transmission Modes Theory + Visualizer -->
-        <div class="card">
-            <div class="card-header">
-                <h2>📡 Transmission Modes</h2>
+    <div class="topics-grid">
+        <!-- Topic 1: Transmission Modes -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>🔁 1. Data Transmission Basics & Modes</h2>
+                <p>Simplex · Half-Duplex · Full-Duplex — the direction of data flow</p>
             </div>
-            <div class="card-content">
-                <p style="margin-bottom: 1rem;">Data communication requires a <strong>protocol</strong> and a <strong>channel</strong>. Data flows in three distinct modes:</p>
-                
-                <div class="mode-visualizer" id="modeVisualizer">
-                    <div class="mode-item" data-mode="simplex">
-                        <div class="mode-title">🔹 Simplex Mode</div>
-                        <div class="mode-diagram">
-                            <span class="device">📤 Sender</span>
-                            <span class="arrow arrow-simplex">————————→</span>
-                            <span class="device">📥 Receiver</span>
-                        </div>
-                        <div class="mode-desc">One-way communication only. Radio broadcast, keyboard → computer.</div>
-                    </div>
-                    <div class="mode-item" data-mode="half">
-                        <div class="mode-title">🔸 Half-Duplex Mode</div>
-                        <div class="mode-diagram">
-                            <span class="device">🔄 Device A</span>
-                            <span class="arrow arrow-half">◄────────►</span>
-                            <span class="device">🔄 Device B</span>
-                        </div>
-                        <div class="mode-desc">Both directions, but ONE at a time. Walkie-talkie, CB radio.</div>
-                    </div>
-                    <div class="mode-item" data-mode="full">
-                        <div class="mode-title">🔹 Full-Duplex Mode</div>
-                        <div class="mode-diagram">
-                            <span class="device">📞 Phone A</span>
-                            <span class="arrow arrow-full">◄════════►</span>
-                            <span class="device">📞 Phone B</span>
-                        </div>
-                        <div class="mode-desc">Simultaneous two-way communication. Telephone, modern Ethernet.</div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p>Data communication requires a <strong>protocol</strong> and a <strong>channel</strong>. Data flows in three fundamental modes:</p>
+                    <ul>
+                        <li><strong>Simplex Mode:</strong> One-way communication only. A device is either transmitter or receiver.</li>
+                        <li><strong>Half-Duplex Mode:</strong> Both devices can transmit and receive, but <em>not simultaneously</em>. Channel flips direction.</li>
+                        <li><strong>Full-Duplex Mode:</strong> Simultaneous bidirectional transmission. Channel capacity is shared.</li>
+                    </ul>
+                    <div class="example-block">
+                        <strong>📌 Examples:</strong><br>
+                        🎙️ Simplex: FM Radio / Keyboard → computer.<br>
+                        📻 Half-Duplex: Walkie-talkie (push-to-talk).<br>
+                        ☎️ Full-Duplex: Telephone call, modern Ethernet.
                     </div>
                 </div>
-                <div id="modeStatus" style="margin-top: 1rem; padding: 0.75rem; background: #1e293b; border-radius: 0.75rem; text-align: center; font-size: 0.85rem;">
-                    💡 Click any mode above to see detailed explanation
+                <div class="playground">
+                    <h4>🎮 Visual Playground: Direction Simulator</h4>
+                    <div class="mode-selector">
+                        <button class="mode-btn" data-mode="simplex">📡 Simplex</button>
+                        <button class="mode-btn" data-mode="half">🔄 Half-Duplex</button>
+                        <button class="mode-btn" data-mode="full">⚡ Full-Duplex</button>
+                    </div>
+                    <div class="widget-container">
+                        <div id="flowDiagram" class="flow-diagram">
+                            <span style="font-weight:600;">[ A ]</span>  ---------------------→  <span style="font-weight:600;">[ B ]</span><br>
+                            <span style="font-size:0.75rem;">🔹 Only A transmits → B receives</span>
+                        </div>
+                        <div id="modeDescription" style="margin-top:0.8rem; font-size:0.85rem; text-align:center; background:#eef2f5; padding:0.5rem; border-radius:40px;">
+                            💡 Simplex: unidirectional flow
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: Analog vs Digital Signals + Interactive Canvas -->
-        <div class="card">
-            <div class="card-header">
-                <h2>📊 Analog vs. Digital Signals</h2>
+        <!-- Topic 2: Analog vs Digital Signals (interactive canvas) -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>📈 2. Analog vs. Digital Signals</h2>
+                <p>Continuous waves vs discrete levels — noise resilience & representation</p>
             </div>
-            <div class="card-content">
-                <div class="signal-canvas">
-                    <canvas id="signalCanvas" width="500" height="200" style="width:100%; height:auto; max-width:500px; aspect-ratio:500/200"></canvas>
-                    <div class="signal-controls">
-                        <button class="btn btn-primary" id="analogBtn">🌊 Analog Signal (Continuous)</button>
-                        <button class="btn btn-secondary" id="digitalBtn">📊 Digital Signal (Discrete)</button>
-                        <button class="btn btn-success" id="animateBtn">▶️ Animate</button>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p><strong>Analog signals</strong> are continuous time-varying waves (infinite values). Prone to noise degradation.<br>
+                    <strong>Digital signals</strong> use discrete voltage levels (0/1). Highly immune to noise, used by computers.</p>
+                    <div class="example-block">
+                        🕰️ Analog: traditional clock, human voice.<br>
+                        ⌚ Digital: digital watch, CPU processing binary data.
                     </div>
-                    <p style="font-size: 0.75rem; margin-top: 0.75rem; color: #94a3b8;">
-                        <strong>Analog:</strong> Smooth, infinite values • Susceptible to noise<br>
-                        <strong>Digital:</strong> Discrete 0/1 levels • Noise-resistant • Used by computers
-                    </p>
+                    <p>Because digital signals only need to distinguish between a limited set of values, they are preferred in modern networking.</p>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Visual Playground: Waveform Explorer</h4>
+                    <div class="signal-buttons">
+                        <button id="showAnalogBtn" class="small-btn">📊 Analog (Sine Wave)</button>
+                        <button id="showDigitalBtn" class="small-btn">⚡ Digital (Square Wave)</button>
+                    </div>
+                    <div class="signal-canvas">
+                        <canvas id="signalCanvas" width="500" height="160" style="width:100%; max-width:500px; height:auto; background:#fff"></canvas>
+                        <div id="signalDesc" style="font-size:0.75rem; margin-top:6px;">🌊 Analog: continuous smooth wave</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 3: Multiplexing (FDM & TDM) with interactive explanation -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>🔀 3. Multiplexing: FDM & TDM</h2>
+                <p>Sharing a single channel — Frequency Division & Time Division techniques</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p><strong>Multiplexing</strong> combines multiple signals into one for efficient channel usage. <strong>MUX</strong> at sender, <strong>DEMUX</strong> at receiver.</p>
+                    <ul>
+                        <li><strong>FDM (Frequency Division Multiplexing):</strong> Divides the frequency spectrum into separate bands. Each user gets a dedicated frequency. Uses <strong>guard bands</strong> to prevent interference. Example: Radio/TV broadcasting.</li>
+                        <li><strong>TDM (Time Division Multiplexing):</strong> Divides time into slots. Each user gets full bandwidth but only for a short time slice. Example: Multiple terminals sharing a single line.</li>
+                    </ul>
+                    <div class="example-block">
+                        📡 FDM: Different radio stations (98.3 MHz, 93.5 MHz) transmit simultaneously.<br>
+                        🎤 TDM: People sharing a microphone — each speaks in turn.
+                    </div>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Visual Playground: Multiplexing Analogy</h4>
+                    <div style="background:#eef2f9; border-radius: 1rem; padding: 0.8rem;">
+                        <div style="display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap;">
+                            <div class="mux-block">📡 User A<br><span style="font-size:0.7rem;">(freq 1 / slot 1)</span></div>
+                            <div class="mux-block">📡 User B<br><span style="font-size:0.7rem;">(freq 2 / slot 2)</span></div>
+                            <div class="mux-block">📡 User C<br><span style="font-size:0.7rem;">(freq 3 / slot 3)</span></div>
+                        </div>
+                        <div style="text-align:center; margin:10px 0; font-weight:bold;">⬇️  MUX → Shared Channel → DEMUX  ⬇️</div>
+                        <div style="display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap;">
+                            <div class="mux-block">🎧 A received</div>
+                            <div class="mux-block">🎧 B received</div>
+                            <div class="mux-block">🎧 C received</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:1rem; background:#fdf7e0; border-radius: 1rem; padding:0.7rem; font-size:0.85rem;">
+                        <strong>🧠 FDM:</strong> All users transmit simultaneously but on different frequencies.<br>
+                        <strong>⏱️ TDM:</strong> Users take turns using full channel capacity.
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Code Breakdown: Signal Generation Logic -->
-    <div class="code-breakdown">
-        <div class="code-header">
-            <h3>📝 Code Breakdown: Signal Visualization Engine</h3>
+    <!-- Exam-Style Questions & Answers (provided) -->
+    <div class="qa-section">
+        <h2>📝 Check Your Progress — Exam-Style Q&A</h2>
+        <div class="qa-item">
+            <div class="qa-question">Q1. What is multiplexing? Why is it needed in data communication?</div>
+            <div class="qa-answer"><strong>Answer:</strong> Multiplexing is the process of combining multiple data streams into a single composite signal for transmission over a shared channel. It is needed because providing dedicated links for every pair of devices is expensive and inefficient; multiplexing maximizes channel utilization and reduces infrastructure costs.</div>
         </div>
-        <pre><code><span class="comment">// JavaScript simulation of Analog vs Digital signals</span>
-<span class="comment">// This demonstrates how computers represent continuous vs discrete waveforms</span>
-
-<span class="keyword">class</span> <span class="function">SignalVisualizer</span> {
-    <span class="comment">// Analog: smooth sine wave - infinite possible values</span>
-    drawAnalog(ctx, width, height, time) {
-        <span class="keyword">for</span> (let x = 0; x < width; x++) {
-            <span class="comment">// y = sin(frequency * x + phase) - continuous function</span>
-            let y = Math.sin(x * 0.03 + time) * 40 + height/2;
-            ctx.lineTo(x, y);
-        }
-    }
-    
-    <span class="comment">// Digital: square wave - only HIGH/LOW states (binary)</span>
-    drawDigital(ctx, width, height, time) {
-        <span class="keyword">for</span> (let x = 0; x < width; x++) {
-            <span class="comment">// Binary logic: either 0 or 1 (no intermediate states)</span>
-            let value = Math.sin(x * 0.1 + time) > 0 ? 1 : 0;
-            let y = value === 1 ? height/4 : height*3/4;
-            ctx.lineTo(x, y);
-        }
-    }
-}
-<span class="comment">// Digital signals resist noise because thresholds are clear.</span>
-<span class="comment">// Analog signals degrade with interference - noise adds uncertainty.</span></code></pre>
-    </div>
-
-    <!-- Exercise Section: Interactive Progress Check -->
-    <div class="card exercise-card">
-        <div class="card-header">
-            <h2>📝 Check Your Progress (IGNOU Exam Pattern)</h2>
+        <div class="qa-item">
+            <div class="qa-question">Q2. Explain the difference between a Multiplexer and a Demultiplexer.</div>
+            <div class="qa-answer"><strong>Answer:</strong> A <strong>Multiplexer (MUX)</strong> combines n input signals into one output at the sender side. A <strong>Demultiplexer (DEMUX)</strong> receives the composite signal and separates it back into n original signals at the receiver side.</div>
         </div>
-        <div class="card-content">
-            <div class="question">
-                <p>❓ <strong>Question 1:</strong> If you are connecting two computers to exchange files where both computers need to send and receive data, but the communication channel can only handle traffic in one direction at a given instant, which transmission mode are you using?</p>
-                <input type="text" id="q1Input" class="answer-input" placeholder="Type your answer... (Simplex / Half-Duplex / Full-Duplex)">
-                <button class="btn btn-secondary" id="checkQ1Btn">Check Answer</button>
-                <div id="q1Feedback" class="feedback"></div>
-            </div>
-            
-            <div class="question">
-                <p>❓ <strong>Question 2:</strong> Why are digital signals generally preferred over analog signals for computer networking and data storage?</p>
-                <textarea id="q2Input" class="answer-input" rows="3" placeholder="Explain in your own words..."></textarea>
-                <button class="btn btn-secondary" id="checkQ2Btn">Check Answer</button>
-                <div id="q2Feedback" class="feedback"></div>
-            </div>
-            
-            <div style="margin-top: 1rem; padding: 0.75rem; background: #1e293b; border-radius: 0.75rem;">
-                <p style="font-size: 0.85rem;">💡 <strong>Learning Tip:</strong> In computer networks (and your MCSL-222/223 labs), all data is ultimately converted to <strong>digital signals (binary)</strong> for processing, storage, and transmission over modern networks. Noise resistance is key!</p>
-            </div>
+        <div class="qa-item">
+            <div class="qa-question">Q3. Describe Frequency Division Multiplexing (FDM).</div>
+            <div class="qa-answer"><strong>Answer:</strong> FDM is an analog technique where the channel’s total bandwidth is divided into non-overlapping frequency bands, each assigned to a different user. All users transmit simultaneously on their dedicated frequency.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q4. What is the purpose of "guard bands" in FDM?</div>
+            <div class="qa-answer"><strong>Answer:</strong> Guard bands are unused frequency gaps placed between adjacent channels to prevent interference (cross-talk) caused by imperfect filters, ensuring signals remain isolated.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q5. Briefly explain Time Division Multiplexing (TDM) and how it differs from FDM.</div>
+            <div class="qa-answer"><strong>Answer:</strong> TDM divides time into slots; each user gets the full bandwidth for a fixed time interval in a round-robin manner. <strong>Difference:</strong> FDM shares the channel by dividing frequency (simultaneous transmission), while TDM shares by dividing time (sequential transmission).</div>
         </div>
     </div>
-    
-    <footer>
-        🖧 MCS-218: Data Communication & Computer Networks | Interactive Textbook — Master Mentorship Day 1<br>
-        🎓 IGNOU MCA Sem-2 | Visual Learning Experience
-    </footer>
+    <footer>📘 MCA Sem-2 Master Mentorship — Day 1: Data Communication Foundations. Interactive visualizations reinforce theory. Keep learning!</footer>
 </div>
 
 <script>
-    // ==================== TRANSMISSION MODES INTERACTIVITY ====================
-    const modeItems = document.querySelectorAll('.mode-item');
-    const modeStatusDiv = document.getElementById('modeStatus');
-    
-    const modeDetails = {
-        simplex: {
-            title: '📡 Simplex Mode',
-            detail: 'One-way communication only. The sender always transmits, receiver always receives. Examples: Radio broadcasting, TV transmission, computer keyboard (keyboard → CPU).',
-            realWorld: '🏭 Application: Traditional broadcast systems, sensors that only send data.'
-        },
-        half: {
-            title: '🔄 Half-Duplex Mode',
-            detail: 'Two-way communication but NOT simultaneous. Devices take turns transmitting. Examples: Walkie-talkie, CB radio, early Ethernet (10Base2).',
-            realWorld: '📻 Application: Push-to-talk systems, some wireless protocols where collision detection matters.'
-        },
-        full: {
-            title: '📞 Full-Duplex Mode',
-            detail: 'Simultaneous two-way communication. Both devices can send and receive at the same time. Examples: Telephone networks, modern Ethernet (switched), fiber optics.',
-            realWorld: '🌐 Application: Modern internet, VoIP calls, high-speed data centers.'
-        }
-    };
-    
-    function updateModeExplanation(mode) {
-        const info = modeDetails[mode];
-        if (info) {
-            modeStatusDiv.innerHTML = `
-                <strong>${info.title}</strong><br>
-                ${info.detail}<br>
-                <span style="color: #60a5fa; font-size: 0.8rem;">${info.realWorld}</span>
+    // ----- Transmission Modes Interactive -----
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const flowDiagramDiv = document.getElementById('flowDiagram');
+    const modeDesc = document.getElementById('modeDescription');
+
+    function updateTransmissionMode(mode) {
+        if (mode === 'simplex') {
+            flowDiagramDiv.innerHTML = `
+                <div style="font-weight:600;">[ A (Sender) ]</div>
+                <div style="font-size:1.4rem;">━━━━━━━━━━━━━━→</div>
+                <div style="font-weight:600;">[ B (Receiver) ]</div>
+                <div style="font-size:0.7rem; margin-top:5px;">🚫 No reverse flow</div>
             `;
+            modeDesc.innerHTML = '💡 Simplex: Unidirectional — A transmits, B only receives. (FM Radio)';
+        } else if (mode === 'half') {
+            flowDiagramDiv.innerHTML = `
+                <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
+                    <div><strong>[ A ]</strong> ⇄ <strong>[ B ]</strong></div>
+                </div>
+                <div style="font-size:0.85rem; margin-top:8px;">⏳ One direction at a time (Walkie-talkie style)</div>
+                <div style="font-size:0.7rem;">Either A→B OR B→A, never both</div>
+            `;
+            modeDesc.innerHTML = '🔄 Half-Duplex: Bidirectional but not simultaneous. Channel flips direction.';
+        } else {
+            flowDiagramDiv.innerHTML = `
+                <div style="display:flex; justify-content:center; gap:2rem; flex-wrap:wrap;">
+                    <div><strong>[ A ]</strong> ⇄ <strong>[ B ]</strong></div>
+                </div>
+                <div style="font-size:0.85rem; margin-top:8px;">⚡ Simultaneous transmission both ways</div>
+                <div style="font-size:0.7rem;">A → B and B → A at the same time (Telephone)</div>
+            `;
+            modeDesc.innerHTML = '📞 Full-Duplex: Both devices transmit/receive concurrently.';
         }
-        // Update active styling
-        modeItems.forEach(item => {
-            item.classList.remove('active');
-            if (item.dataset.mode === mode) {
-                item.classList.add('active');
-            }
-        });
     }
-    
-    modeItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const mode = item.dataset.mode;
-            updateModeExplanation(mode);
+
+    modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            modeBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const mode = btn.getAttribute('data-mode');
+            updateTransmissionMode(mode);
         });
     });
-    // Set default active
-    updateModeExplanation('simplex');
-    
-    // ==================== SIGNAL VISUALIZATION ====================
+    // initialize simplex active
+    document.querySelector('.mode-btn[data-mode="simplex"]').classList.add('active');
+    updateTransmissionMode('simplex');
+
+    // ----- Analog vs Digital Canvas Drawing -----
     const canvas = document.getElementById('signalCanvas');
     const ctx = canvas.getContext('2d');
-    let signalType = 'analog';
-    let animationId = null;
-    let phase = 0;
-    
-    function setCanvasSize() {
+    let currentSignal = 'analog'; // analog or digital
+
+    function resizeCanvas() {
         const container = canvas.parentElement;
-        const width = Math.min(500, container.clientWidth - 20);
-        canvas.width = width;
-        canvas.height = 200;
-    }
-    window.addEventListener('resize', () => {
-        setCanvasSize();
+        const maxWidth = Math.min(500, container.clientWidth);
+        canvas.style.width = `${maxWidth}px`;
+        canvas.width = maxWidth;
+        canvas.height = 160;
         drawSignal();
-    });
-    
+    }
+    window.addEventListener('resize', () => resizeCanvas());
+
     function drawAnalog() {
-        const w = canvas.width;
-        const h = canvas.height;
+        const w = canvas.width, h = canvas.height;
+        if (w === 0) return;
         ctx.clearRect(0, 0, w, h);
         ctx.beginPath();
-        ctx.strokeStyle = '#60a5fa';
-        ctx.lineWidth = 2;
-        
+        ctx.strokeStyle = '#2c7da0';
+        ctx.lineWidth = 2.5;
+        const amplitude = h * 0.35;
+        const midY = h / 2;
+        const cycles = 2.2;
         for (let x = 0; x <= w; x++) {
-            // Sine wave: continuous smooth curve
-            const t = (x / w) * Math.PI * 4 + phase;
-            const y = h/2 + Math.sin(t) * (h/3);
+            let t = (x / w) * cycles * Math.PI * 2;
+            let y = midY + amplitude * Math.sin(t);
             if (x === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
         }
         ctx.stroke();
-        
-        // Draw threshold guides
+        // grid lines
         ctx.beginPath();
-        ctx.strokeStyle = '#475569';
+        ctx.strokeStyle = '#cddfe7';
+        ctx.lineWidth = 0.5;
+        ctx.setLineDash([5, 5]);
+        ctx.moveTo(0, midY);
+        ctx.lineTo(w, midY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        document.getElementById('signalDesc').innerHTML = '🌊 Analog Signal: Smooth continuous wave (infinite values)';
+    }
+
+    function drawDigital() {
+        const w = canvas.width, h = canvas.height;
+        if (w === 0) return;
+        ctx.clearRect(0, 0, w, h);
+        ctx.beginPath();
+        ctx.strokeStyle = '#2d6a4f';
+        ctx.lineWidth = 2.5;
+        const high = h * 0.3;
+        const low = h * 0.7;
+        const midY = h / 2;
+        const steps = 8;
+        const stepWidth = w / steps;
+        let currentY = low;
+        ctx.moveTo(0, currentY);
+        for (let i = 0; i <= steps; i++) {
+            let x = i * stepWidth;
+            let value = (i % 2 === 0) ? low : high;   // 0/1 pattern
+            if (i === 0) value = low;
+            ctx.lineTo(x, currentY);
+            ctx.lineTo(x, value);
+            currentY = value;
+        }
+        ctx.lineTo(w, currentY);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.strokeStyle = '#cddfe7';
         ctx.lineWidth = 0.5;
         ctx.setLineDash([5, 5]);
         ctx.moveTo(0, h/2);
         ctx.lineTo(w, h/2);
         ctx.stroke();
         ctx.setLineDash([]);
+        document.getElementById('signalDesc').innerHTML = '⚡ Digital Signal: Discrete voltage levels (binary 0/1)';
     }
-    
-    function drawDigital() {
-        const w = canvas.width;
-        const h = canvas.height;
-        ctx.clearRect(0, 0, w, h);
-        ctx.beginPath();
-        ctx.strokeStyle = '#10b981';
-        ctx.lineWidth = 2.5;
-        
-        let lastY = null;
-        for (let x = 0; x <= w; x++) {
-            // Digital: discrete levels (HIGH or LOW)
-            const t = (x / w) * Math.PI * 4 + phase;
-            const value = Math.sin(t) > 0 ? 1 : 0;
-            const y = value === 1 ? h/4 : (h * 3/4);
-            
-            if (x === 0) {
-                ctx.moveTo(x, y);
-            } else if (lastY !== y) {
-                ctx.lineTo(x, lastY);
-                ctx.moveTo(x, lastY);
-                ctx.lineTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
-            lastY = y;
-        }
-        ctx.stroke();
-        
-        // Draw digital reference lines
-        ctx.beginPath();
-        ctx.strokeStyle = '#475569';
-        ctx.setLineDash([5, 5]);
-        ctx.moveTo(0, h/4);
-        ctx.lineTo(w, h/4);
-        ctx.moveTo(0, h * 3/4);
-        ctx.lineTo(w, h * 3/4);
-        ctx.stroke();
-        ctx.setLineDash([]);
-    }
-    
+
     function drawSignal() {
-        if (signalType === 'analog') {
-            drawAnalog();
-        } else {
-            drawDigital();
-        }
+        if (currentSignal === 'analog') drawAnalog();
+        else drawDigital();
     }
-    
-    function animate() {
-        phase += 0.05;
-        drawSignal();
-        animationId = requestAnimationFrame(animate);
-    }
-    
-    function stopAnimation() {
-        if (animationId) {
-            cancelAnimationFrame(animationId);
-            animationId = null;
-        }
-        phase = 0;
-        drawSignal();
-    }
-    
-    document.getElementById('analogBtn').addEventListener('click', () => {
-        signalType = 'analog';
-        stopAnimation();
+
+    document.getElementById('showAnalogBtn').addEventListener('click', () => {
+        currentSignal = 'analog';
         drawSignal();
     });
-    
-    document.getElementById('digitalBtn').addEventListener('click', () => {
-        signalType = 'digital';
-        stopAnimation();
+    document.getElementById('showDigitalBtn').addEventListener('click', () => {
+        currentSignal = 'digital';
         drawSignal();
     });
-    
-    document.getElementById('animateBtn').addEventListener('click', () => {
-        if (animationId) {
-            stopAnimation();
-        } else {
-            phase = 0;
-            animate();
-        }
+
+    // initial draw after layout
+    setTimeout(() => {
+        resizeCanvas();
+        drawSignal();
+    }, 100);
+    window.addEventListener('resize', () => {
+        if (canvas.width !== canvas.clientWidth) resizeCanvas();
+        drawSignal();
     });
-    
-    setCanvasSize();
-    drawSignal();
-    
-    // ==================== EXERCISE INTERACTIVE CHECK ====================
-    function checkQuestion1() {
-        const input = document.getElementById('q1Input').value.trim().toLowerCase();
-        const feedback = document.getElementById('q1Feedback');
-        const correctAnswer = 'half-duplex';
-        const acceptable = ['half-duplex', 'half duplex', 'halfduplex', 'half'];
-        
-        if (acceptable.some(opt => input.includes(opt)) || input === correctAnswer) {
-            feedback.innerHTML = '✅ Correct! Half-Duplex mode allows two-way communication but only one direction at a time — perfect for file exchange where channel handles one transmission at an instant.';
-            feedback.className = 'feedback correct';
-        } else if (input === '') {
-            feedback.innerHTML = '💡 Hint: The mode where both devices can send/receive but NOT simultaneously. Think walkie-talkie!';
-            feedback.className = 'feedback incorrect';
-        } else {
-            feedback.innerHTML = `❌ Not quite. The correct answer is <strong>Half-Duplex</strong>. Both computers need to exchange files, but the channel only allows one direction at a time → that's the definition of Half-Duplex.`;
-            feedback.className = 'feedback incorrect';
-        }
-    }
-    
-    function checkQuestion2() {
-        const input = document.getElementById('q2Input').value.trim().toLowerCase();
-        const feedback = document.getElementById('q2Feedback');
-        
-        const keywords = ['noise', 'resistant', 'discrete', 'binary', 'error', 'reliable', '0 and 1', 'digital', 'storage', 'interference'];
-        let matched = keywords.filter(kw => input.includes(kw)).length;
-        
-        if (input.length > 15 && matched >= 2) {
-            feedback.innerHTML = '✅ Excellent! Digital signals are preferred because they are more resistant to noise, easier to regenerate, less error-prone, and computers natively work with binary (0/1) logic. They maintain integrity over long distances.';
-            feedback.className = 'feedback correct';
-        } else if (input.length === 0) {
-            feedback.innerHTML = '💡 Try answering: Think about noise immunity, binary nature of computers, and reliability in storage.';
-            feedback.className = 'feedback incorrect';
-        } else {
-            feedback.innerHTML = '⚠️ Good attempt! Key reasons: Digital signals resist noise/ interference, are easier to regenerate without degradation, computers process binary data, and they offer error detection. Expand your answer for full marks!';
-            feedback.className = 'feedback incorrect';
-        }
-    }
-    
-    document.getElementById('checkQ1Btn').addEventListener('click', checkQuestion1);
-    document.getElementById('checkQ2Btn').addEventListener('click', checkQuestion2);
-    
-    // Add enter key support for Q1
-    document.getElementById('q1Input').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') checkQuestion1();
+
+    // Additional style: make multiplex demo interactive with subtle highlight? not needed but adds life
+    const muxBlocks = document.querySelectorAll('.mux-block');
+    muxBlocks.forEach(block => {
+        block.addEventListener('mouseenter', () => block.style.background = '#e0eef9');
+        block.addEventListener('mouseleave', () => block.style.background = '#e9f0f5');
     });
 </script>
 </body>
