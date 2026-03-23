@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MCS-221 Day 9: OLTP vs OLAP | Data Cube Operations (Roll-up & Drill-down)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #eef4ea 0%, #e0e8dc 100%);
+            color: #1e2f2a;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+        }
+
+        .master-textbook {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .week-header {
+            background: linear-gradient(135deg, #2c5e3a 0%, #3f7e4a 100%);
+            border-radius: 2rem 2rem 1.8rem 1.8rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 12px 28px -12px rgba(0,0,0,0.3);
+        }
+        .week-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.3px;
+        }
+        .week-header h1 span {
+            background: #f4b942;
+            font-size: 1rem;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            margin-left: 0.8rem;
+            vertical-align: middle;
+            color: #1e2f1e;
+        }
+        .day-badge {
+            display: inline-block;
+            background: #f4b942cc;
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.6rem;
+            color: #1e3a1e;
+        }
+        .week-header p {
+            color: #e0f0e0;
+            margin-top: 0.8rem;
+        }
+
+        /* topics grid */
+        .topics-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border: 1px solid #d4e0d0;
+        }
+
+        .topic-title {
+            background: #fafef7;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #e0ecd8;
+        }
+        .topic-title h2 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #2c6e3e;
+        }
+        .topic-title p {
+            color: #5b7c60;
+            font-size: 0.9rem;
+        }
+
+        .theory-body {
+            padding: 1.5rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .explain-text {
+            background: #ffffff;
+        }
+        .explain-text h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #2c7a4a;
+            border-left: 5px solid #f4b942;
+            padding-left: 0.8rem;
+        }
+        .explain-text p, .explain-text li {
+            margin-bottom: 0.8rem;
+            color: #2c4a34;
+        }
+        .explain-text ul, .explain-text ol {
+            padding-left: 1.5rem;
+            margin: 0.7rem 0;
+        }
+        .example-block {
+            background: #fef9e8;
+            border-radius: 1.2rem;
+            padding: 0.9rem 1.2rem;
+            margin: 1rem 0;
+            border-left: 4px solid #f4b942;
+        }
+        .highlight {
+            background: #e0f0dc;
+            padding: 0.1rem 0.3rem;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+
+        /* playground widgets */
+        .playground {
+            background: #fafef7;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            box-shadow: inset 0 0 0 1px #d8ecd8, 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .playground h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #2c7a4a;
+        }
+
+        /* OLTP vs OLAP Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            background: #fefef5;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #d0dcce;
+            padding: 0.5rem;
+            text-align: left;
+            vertical-align: top;
+        }
+        .comparison-table th {
+            background: #e0ecd8;
+            font-weight: 600;
+        }
+
+        /* Data Cube Visual */
+        .cube-container {
+            background: #eef3e8;
+            border-radius: 1rem;
+            padding: 1rem;
+            text-align: center;
+        }
+        .cube-visual {
+            background: #fff8e8;
+            border-radius: 1rem;
+            padding: 0.8rem;
+            font-family: monospace;
+            margin: 0.5rem 0;
+        }
+        .hierarchy-buttons {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+            margin: 0.8rem 0;
+            flex-wrap: wrap;
+        }
+        .op-btn {
+            background: #3e8a5a;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .op-btn:hover {
+            background: #2c6e3e;
+            transform: translateY(-2px);
+        }
+        .data-display {
+            background: #1e2f2a;
+            color: #c0f0c0;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            margin-top: 0.8rem;
+        }
+
+        button {
+            background: #3e8a5a;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* Q&A Section */
+        .qa-section {
+            background: white;
+            border-radius: 1.8rem;
+            margin-top: 2rem;
+            padding: 1.8rem 2rem;
+            border: 1px solid #d4e0d0;
+        }
+        .qa-section h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2c6e3e;
+            border-left: 5px solid #f4b942;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .qa-item {
+            margin-bottom: 1.8rem;
+            border-bottom: 1px solid #e0ecd8;
+            padding-bottom: 1rem;
+        }
+        .qa-question {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #2c7a4a;
+            margin-bottom: 0.5rem;
+        }
+        .qa-answer {
+            color: #2f5b48;
+            padding-left: 1rem;
+            border-left: 3px solid #f4b94280;
+        }
+
+        @media (max-width: 850px) {
+            .theory-body {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #6f8e70;
+        }
+    </style>
+</head>
+<body>
+<div class="master-textbook">
+    <div class="week-header">
+        <h1>📈 MCS-221: Data Warehousing & Data Mining <span>Day 9</span></h1>
+        <div class="day-badge">⚡ OLTP vs OLAP | Data Cube Operations: Roll-up & Drill-down</div>
+        <p>Transactional systems vs Analytical systems • Multidimensional data navigation • Concept hierarchies</p>
+    </div>
+
+    <div class="topics-grid">
+        <!-- Topic 1: OLTP vs OLAP -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>🔄 1. OLTP vs. OLAP</h2>
+                <p>Online Transaction Processing vs Online Analytical Processing — two sides of data management</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p><strong>OLTP (Online Transaction Processing):</strong> Captures day-to-day transactions in real-time. Fast INSERT/UPDATE/DELETE, ACID compliant, highly normalized. Used for running business operations (e.g., ATM withdrawal, online order).</p>
+                    <p><strong>OLAP (Online Analytical Processing):</strong> Complex queries on historical data for business intelligence. Read-heavy, denormalized schemas (Star/Snowflake), supports multidimensional analysis. Used for strategic decisions (e.g., yearly sales trends).</p>
+                    <div class="example-block">
+                        🏧 <strong>Example:</strong><br>
+                        • OLTP: You withdraw ₹500 from ATM — milliseconds, updates your balance.<br>
+                        • OLAP: Bank CEO analyzes "total withdrawals across all branches over 5 years" — minutes, helps decide where to open new ATMs.
+                    </div>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Interactive Comparison</h4>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr><th>Feature</th><th>OLTP</th><th>OLAP</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>🎯 Purpose</td><td>Run daily operations</td><td>Strategic analysis & BI</td></tr>
+                            <tr><td>📊 Data</td><td>Current, transactional</td><td>Historical, aggregated</td></tr>
+                            <tr><td>⚡ Queries</td><td>Simple, standardized (INSERT/UPDATE)</td><td>Complex, multidimensional (SELECT)</td></tr>
+                            <tr><td>⏱️ Response</td><td>Milliseconds</td><td>Seconds to hours</td></tr>
+                            <tr><td>📐 Schema</td><td>Highly normalized (3NF)</td><td>Denormalized (Star/Snowflake)</td></tr>
+                        </tbody>
+                    </table>
+                    <div style="margin-top:0.8rem; background:#eef3e8; border-radius:0.8rem; padding:0.5rem; font-size:0.7rem; text-align:center;">
+                        💡 OLTP systems feed data into OLAP systems via ETL (Extract, Transform, Load) processes.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 2: Data Cube Operations (Roll-up & Drill-down) -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>🧊 2. Data Cube Operations: Roll-up & Drill-down</h2>
+                <p>Navigating the concept hierarchy — aggregating up (Roll-up) vs drilling down into detail (Drill-down)</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p>OLAP views data as a <strong>multidimensional cube</strong> with dimensions like Time, Location, Product. <strong>Concept Hierarchy</strong> defines levels: Day → Month → Quarter → Year (Time).</p>
+                    <ul>
+                        <li><strong>🔺 Roll-up (Aggregation):</strong> Moves UP the hierarchy — summarizes data (e.g., Monthly → Quarterly sales).</li>
+                        <li><strong>🔻 Drill-down:</strong> Moves DOWN the hierarchy — splits data into finer detail (e.g., Country → State → City sales).</li>
+                    </ul>
+                    <div class="example-block">
+                        📊 <strong>Example:</strong><br>
+                        • Roll-up: Viewing sales by Month → apply Roll-up → see sales by Quarter.<br>
+                        • Drill-down: Viewing sales by Country → Drill-down → see sales by individual States.
+                    </div>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Interactive Data Cube Simulator</h4>
+                    <div class="cube-container">
+                        <div class="cube-visual" id="cubeVisual">
+                            📊 <strong>Current View:</strong> Sales by <span id="currentLevel">Month</span>
+                        </div>
+                        <div id="cubeData" class="data-display">
+                            📈 <strong>Sales Data (Monthly):</strong><br>
+                            Jan: ₹12,500 | Feb: ₹14,200 | Mar: ₹18,900<br>
+                            Apr: ₹11,800 | May: ₹15,400 | Jun: ₹20,100
+                        </div>
+                        <div class="hierarchy-buttons">
+                            <button id="rollUpBtn" class="op-btn">🔺 Roll-up (Month → Quarter)</button>
+                            <button id="drillDownBtn" class="op-btn">🔻 Drill-down (Quarter → Month)</button>
+                            <button id="resetCubeBtn" class="op-btn" style="background:#5f7f68;">⟳ Reset to Monthly</button>
+                        </div>
+                        <div style="font-size:0.65rem; margin-top:0.5rem;">
+                            📐 <strong>Concept Hierarchy (Time):</strong> Day → Month → Quarter → Year
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam-Style Q&A (5 PYQ from June 2024 pattern) -->
+    <div class="qa-section">
+        <h2>📝 Exam-Style Questions & Answers (June 2024 Pattern)</h2>
+        <div class="qa-item">
+            <div class="qa-question">Q1. Differentiate between OLTP and OLAP. (High-weightage PYQ)</div>
+            <div class="qa-answer"><strong>Answer:</strong> <strong>Purpose:</strong> OLTP runs daily business operations; OLAP supports strategic decision-making. <strong>Data:</strong> OLTP handles current transaction data; OLAP handles historical aggregated data. <strong>Queries:</strong> OLTP uses simple INSERT/UPDATE/DELETE; OLAP uses complex SELECT queries. <strong>Response:</strong> OLTP in milliseconds; OLAP in seconds/hours. <strong>Schema:</strong> OLTP uses normalized (3NF); OLAP uses denormalized (Star/Snowflake).</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q2. Discuss the OLAP data cube operation: Roll-up, with an example. (Direct PYQ)</div>
+            <div class="qa-answer"><strong>Answer:</strong> Roll-up is an OLAP operation that performs aggregation by climbing up a concept hierarchy or reducing dimensions. It provides a summarized, broader view. <strong>Example:</strong> If sales data is at "City" level (Pune, Mumbai), a roll-up on Location dimension aggregates to "State" level (Maharashtra), summarizing city sales into one state total.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q3. Discuss the OLAP data cube operation: Drill-down, with an example. (Direct PYQ)</div>
+            <div class="qa-answer"><strong>Answer:</strong> Drill-down is the reverse of roll-up — it navigates from summarized data to detailed data by stepping down a concept hierarchy or adding dimensions. <strong>Example:</strong> Viewing total sales at "Yearly" level (2025 total), drill-down on Time dimension breaks it into "Quarter" or "Month" sales figures within that year.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q4. Why must a data warehouse be kept separate from the operational (OLTP) database?</div>
+            <div class="qa-answer"><strong>Answer:</strong> Separation is required because OLTP systems are optimized for high-concurrency, fast transactional writes with locking. OLAP queries are read-heavy, complex, and resource-intensive. Running OLAP queries on a live OLTP database would consume system resources, causing transaction delays or crashes, violating performance requirements for daily operations.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q5. What is a "Concept Hierarchy" in dimensional modeling?</div>
+            <div class="qa-answer"><strong>Answer:</strong> A concept hierarchy defines a sequence of mappings from low-level concepts to higher-level, more general concepts within a dimension. It enables OLAP operations like roll-up and drill-down. For example, in Time dimension: Day → Month → Quarter → Year. In Location: City → District → State → Country.</div>
+        </div>
+    </div>
+    <footer>📘 MCA Sem-2 Master Mentorship — Day 9: OLTP vs OLAP & Data Cube Operations. Next: Day 10 — Network Switching and Routing Algorithms (MCS-218)!</footer>
+</div>
+
+<script>
+    // ----- Data Cube Simulator (Roll-up / Drill-down) -----
+    let currentView = "month"; // "month", "quarter", "year"
+    
+    const monthlyData = {
+        Jan: 12500, Feb: 14200, Mar: 18900,
+        Apr: 11800, May: 15400, Jun: 20100
+    };
+    
+    const quarterlyData = {
+        "Q1": 12500 + 14200 + 18900,
+        "Q2": 11800 + 15400 + 20100
+    };
+    
+    const yearlyData = {
+        "2025": quarterlyData.Q1 + quarterlyData.Q2
+    };
+    
+    const cubeDataDiv = document.getElementById('cubeData');
+    const currentLevelSpan = document.getElementById('currentLevel');
+    
+    function updateCubeDisplay() {
+        if (currentView === "month") {
+            currentLevelSpan.textContent = "Month";
+            cubeDataDiv.innerHTML = `📈 <strong>Sales Data (Monthly - 2025):</strong><br>
+                Jan: ₹${monthlyData.Jan.toLocaleString()} | Feb: ₹${monthlyData.Feb.toLocaleString()} | Mar: ₹${monthlyData.Mar.toLocaleString()}<br>
+                Apr: ₹${monthlyData.Apr.toLocaleString()} | May: ₹${monthlyData.May.toLocaleString()} | Jun: ₹${monthlyData.Jun.toLocaleString()}<br>
+                <span style="color:#b3ffcf;">📊 View: Detailed by Month</span>`;
+        } else if (currentView === "quarter") {
+            currentLevelSpan.textContent = "Quarter";
+            cubeDataDiv.innerHTML = `📈 <strong>Sales Data (Quarterly - 2025):</strong><br>
+                Q1 (Jan-Mar): ₹${quarterlyData.Q1.toLocaleString()}<br>
+                Q2 (Apr-Jun): ₹${quarterlyData.Q2.toLocaleString()}<br>
+                <span style="color:#b3ffcf;">🔺 Roll-up applied: Months aggregated into Quarters</span>`;
+        } else {
+            currentLevelSpan.textContent = "Year";
+            cubeDataDiv.innerHTML = `📈 <strong>Sales Data (Yearly - 2025):</strong><br>
+                Total Year 2025: ₹${yearlyData["2025"].toLocaleString()}<br>
+                <span style="color:#b3ffcf;">📊 Highest aggregation level (Year)</span>`;
+        }
+    }
+    
+    function rollUp() {
+        if (currentView === "month") {
+            currentView = "quarter";
+        } else if (currentView === "quarter") {
+            currentView = "year";
+        } else {
+            // already at year, show message
+            cubeDataDiv.innerHTML = `📈 <strong>Sales Data (Yearly - 2025):</strong><br>
+                Total Year 2025: ₹${yearlyData["2025"].toLocaleString()}<br>
+                <span style="color:#ffcc88;">⚠️ Already at highest level (Year). Cannot roll-up further.</span>`;
+            return;
+        }
+        updateCubeDisplay();
+    }
+    
+    function drillDown() {
+        if (currentView === "year") {
+            currentView = "quarter";
+        } else if (currentView === "quarter") {
+            currentView = "month";
+        } else {
+            cubeDataDiv.innerHTML = `📈 <strong>Sales Data (Monthly - 2025):</strong><br>
+                Jan: ₹${monthlyData.Jan.toLocaleString()} | Feb: ₹${monthlyData.Feb.toLocaleString()} | Mar: ₹${monthlyData.Mar.toLocaleString()}<br>
+                Apr: ₹${monthlyData.Apr.toLocaleString()} | May: ₹${monthlyData.May.toLocaleString()} | Jun: ₹${monthlyData.Jun.toLocaleString()}<br>
+                <span style="color:#ffcc88;">⚠️ Already at lowest level (Month). Cannot drill-down further.</span>`;
+            return;
+        }
+        updateCubeDisplay();
+    }
+    
+    function resetToMonth() {
+        currentView = "month";
+        updateCubeDisplay();
+    }
+    
+    document.getElementById('rollUpBtn').addEventListener('click', rollUp);
+    document.getElementById('drillDownBtn').addEventListener('click', drillDown);
+    document.getElementById('resetCubeBtn').addEventListener('click', resetToMonth);
+    
+    // initial display
+    updateCubeDisplay();
+    
+    // Additional elaboration notes
+    const oltpPlayground = document.querySelector('.comparison-table')?.parentElement;
+    if (oltpPlayground) {
+        const oltpNote = document.createElement('div');
+        oltpNote.className = 'example-block';
+        oltpNote.style.marginTop = '0.8rem';
+        oltpNote.style.fontSize = '0.7rem';
+        oltpNote.innerHTML = '📌 <strong>Real-world:</strong> ETL tools (like Apache Airflow, Talend) move data from OLTP systems to OLAP data warehouses daily for business intelligence dashboards.';
+        oltpPlayground.appendChild(oltpNote);
+    }
+    
+    const cubePlayground = document.querySelector('.cube-container')?.parentElement;
+    if (cubePlayground) {
+        const cubeNote = document.createElement('div');
+        cubeNote.className = 'example-block';
+        cubeNote.style.marginTop = '0.6rem';
+        cubeNote.style.fontSize = '0.7rem';
+        cubeNote.innerHTML = '💡 <strong>Other OLAP Operations:</strong> Slice (select one dimension), Dice (sub-cube), Pivot (rotate axes). Roll-up and Drill-down are the most frequently tested in exams.';
+        cubePlayground.appendChild(cubeNote);
+    }
+</script>
+</body>
+</html>
