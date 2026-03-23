@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MCS-219 Day 3: OOAD | Object-Oriented Modeling, Abstraction, Classes vs Objects</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f4f7fc;
+            color: #1e2f3a;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+        }
+
+        .master-textbook {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .day-header {
+            background: linear-gradient(135deg, #1f3e48 0%, #2c5a6b 100%);
+            border-radius: 2rem 2rem 1.8rem 1.8rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 12px 28px -12px rgba(0,0,0,0.25);
+        }
+        .day-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.3px;
+        }
+        .day-header h1 span {
+            background: #f4b942;
+            font-size: 1rem;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            margin-left: 0.8rem;
+            vertical-align: middle;
+            color: #1e2f3a;
+        }
+        .day-badge {
+            display: inline-block;
+            background: #f4b942cc;
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.6rem;
+            color: #1e3a44;
+        }
+        .day-header p {
+            color: #d4e9f2;
+            margin-top: 0.8rem;
+        }
+
+        /* topics grid */
+        .topics-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2ecf3;
+        }
+
+        .topic-title {
+            background: #fbfefd;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #eef3f8;
+        }
+        .topic-title h2 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #1e6b5e;
+        }
+        .topic-title p {
+            color: #5b7c8c;
+            font-size: 0.9rem;
+        }
+
+        .theory-body {
+            padding: 1.5rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .explain-text {
+            background: #ffffff;
+        }
+        .explain-text h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #2c7a6b;
+            border-left: 5px solid #f4b942;
+            padding-left: 0.8rem;
+        }
+        .explain-text p, .explain-text li {
+            margin-bottom: 0.8rem;
+            color: #2c4a5a;
+        }
+        .explain-text ul, .explain-text ol {
+            padding-left: 1.5rem;
+            margin: 0.7rem 0;
+        }
+        .example-block {
+            background: #fef9e8;
+            border-radius: 1.2rem;
+            padding: 0.9rem 1.2rem;
+            margin: 1rem 0;
+            border-left: 4px solid #f4b942;
+        }
+        .highlight-badge {
+            background: #e9f3f0;
+            padding: 0.1rem 0.4rem;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        /* playground widgets */
+        .playground {
+            background: #fafdfe;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            box-shadow: inset 0 0 0 1px #e4eff6, 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .playground h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #2c7a6b;
+        }
+
+        /* UML Class Diagram Visual */
+        .uml-class {
+            background: #fef9ef;
+            border: 2px solid #d4c9a8;
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 260px;
+            margin: 0 auto;
+            font-family: 'Fira Code', monospace;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+        }
+        .uml-name {
+            background: #e5e9dc;
+            padding: 0.6rem;
+            font-weight: 700;
+            text-align: center;
+            font-size: 1rem;
+            border-bottom: 1px solid #cbc29e;
+        }
+        .uml-attributes, .uml-methods {
+            padding: 0.5rem;
+            font-size: 0.75rem;
+            border-bottom: 1px solid #e0d6b8;
+        }
+        .uml-attributes div, .uml-methods div {
+            font-family: monospace;
+            margin: 0.2rem 0;
+        }
+        .object-preview {
+            background: #eef3f0;
+            border-radius: 1rem;
+            padding: 0.8rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* Abstraction Interactive */
+        .abstraction-demo {
+            background: #eef3fa;
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+        .attr-toggle {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin: 1rem 0;
+        }
+        .toggle-chip {
+            background: #dce5ec;
+            border-radius: 40px;
+            padding: 0.3rem 0.9rem;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+        .toggle-chip.active {
+            background: #2c7a6b;
+            color: white;
+        }
+        .abstract-view {
+            background: white;
+            border-radius: 1rem;
+            padding: 0.8rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+        }
+
+        /* Class vs Object playground */
+        .class-object-card {
+            background: #eef6f2;
+            border-radius: 1rem;
+            padding: 0.8rem;
+        }
+        .instance-area {
+            background: white;
+            border-radius: 1rem;
+            padding: 0.6rem;
+            margin-top: 0.6rem;
+        }
+        .add-object-btn {
+            background: #2c7a6b;
+            border: none;
+            color: white;
+            padding: 0.3rem 0.9rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        button {
+            background: #3e8a7a;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.1s;
+            font-family: inherit;
+        }
+        button:hover {
+            background: #1e6b5e;
+        }
+
+        /* Q&A Section */
+        .qa-section {
+            background: white;
+            border-radius: 1.8rem;
+            margin-top: 2rem;
+            padding: 1.8rem 2rem;
+            border: 1px solid #e2ecf3;
+        }
+        .qa-section h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #1e6b5e;
+            border-left: 5px solid #f4b942;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .qa-item {
+            margin-bottom: 1.8rem;
+            border-bottom: 1px solid #eaf0f5;
+            padding-bottom: 1rem;
+        }
+        .qa-question {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #2c7a6b;
+            margin-bottom: 0.5rem;
+        }
+        .qa-answer {
+            color: #2f5b68;
+            padding-left: 1rem;
+            border-left: 3px solid #f4b94280;
+        }
+
+        @media (max-width: 850px) {
+            .theory-body {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #6f8ea0;
+        }
+    </style>
+</head>
+<body>
+<div class="master-textbook">
+    <div class="day-header">
+        <h1>🧩 MCS-219: Object-Oriented Analysis & Design <span>Day 3</span></h1>
+        <div class="day-badge">🎯 Fundamentals: Object-Oriented Modeling · Abstraction · Classes vs Objects</div>
+        <p>Conceptual blueprints, essential features, and the blueprint-instance relationship — with interactive UML & live demos</p>
+    </div>
+
+    <div class="topics-grid">
+        <!-- Topic 1: Object-Oriented Modeling (OOM) -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>🏗️ 1. Object-Oriented Modeling (OOM)</h2>
+                <p>Blueprint of real systems using objects and relationships</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p><strong>Object-Oriented Modeling</strong> is a technique where we break down a problem by identifying real-world <strong>objects</strong> (like Student, Course) and their interactions. Instead of focusing solely on functions, we first define <strong>what the system is made of</strong>.</p>
+                    <ul>
+                        <li><strong>Key idea:</strong> Model the domain using objects that encapsulate both data and behavior.</li>
+                        <li><strong>Advantages:</strong> Closer to real world, supports reusability, easier maintenance, and incremental development.</li>
+                    </ul>
+                    <div class="example-block">
+                        🎓 <strong>University System Example:</strong> Identify objects: <span class="highlight-badge">Student</span>, <span class="highlight-badge">Professor</span>, <span class="highlight-badge">Course</span>, <span class="highlight-badge">Department</span>. Then define relationships: A <strong>Student</strong> enrolls in a <strong>Course</strong>; a <strong>Professor</strong> teaches a <strong>Course</strong>.
+                    </div>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Visual: OOM in Action</h4>
+                    <div style="background:#eef2f0; border-radius:1rem; padding:1rem; text-align:center;">
+                        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:1rem;">
+                            <div style="background:#ffe6c7; border-radius:12px; padding:0.5rem 1rem;">📘 Student</div>
+                            <div style="background:#ffe6c7; border-radius:12px; padding:0.5rem 1rem;">👩‍🏫 Professor</div>
+                            <div style="background:#ffe6c7; border-radius:12px; padding:0.5rem 1rem;">📖 Course</div>
+                            <div style="background:#ffe6c7; border-radius:12px; padding:0.5rem 1rem;">🏛️ Department</div>
+                        </div>
+                        <div style="margin:1rem 0; font-size:0.8rem;">⟷ <strong>Relationships:</strong> enrolls in, teaches, belongs to ⟷</div>
+                        <div style="background:#fff1df; border-radius:12px; padding:0.6rem; font-size:0.75rem;">✅ OOM helps build a blueprint before coding — reduces risk and improves communication.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 2: Abstraction (with interactive toggles) -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>🔍 2. Abstraction</h2>
+                <p>Essential features only — hiding unnecessary details</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p><strong>Abstraction</strong> means focusing on what an object does, not how it does it. In OOAD, we decide which attributes and operations are <em>essential</em> for the current context and ignore the rest.</p>
+                    <div class="example-block">
+                        🧑‍🎓 <strong>Student Abstraction:</strong> For university system, we need <code>name, enrollmentNo, course</code>. We ignore <em>shoe size, favorite movie, hair color</em> — they are irrelevant. Abstraction simplifies complexity.
+                    </div>
+                    <p><strong>Modularity:</strong> Abstraction lets us divide a large system into smaller, self-contained modules (classes) that can be developed independently.</p>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Interactive Abstraction Lab</h4>
+                    <div class="abstraction-demo">
+                        <div style="font-weight:600;">🎓 Student Entity — Choose what to include (University Context)</div>
+                        <div class="attr-toggle" id="attrToggleContainer">
+                            <span data-attr="name" class="toggle-chip active">📛 Name</span>
+                            <span data-attr="enroll" class="toggle-chip active">🔢 Enrollment No</span>
+                            <span data-attr="course" class="toggle-chip active">📚 Course</span>
+                            <span data-attr="shoeSize" class="toggle-chip">👟 Shoe Size (irrelevant)</span>
+                            <span data-attr="movie" class="toggle-chip">🎬 Fav Movie (ignore)</span>
+                        </div>
+                        <div id="abstractRepresentation" class="abstract-view">
+                            <strong>Abstracted Student:</strong><br>
+                            • Name: "Riya Sharma"<br>
+                            • Enrollment No: "MCA24001"<br>
+                            • Course: "MCA"
+                        </div>
+                        <p style="font-size:0.7rem; margin-top:0.5rem;">💡 Click to add/remove attributes — abstraction keeps only essential ones.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 3: Classes vs Objects (UML + Object creator) -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>📦 3. Classes vs. Objects</h2>
+                <p>Blueprint (Class) vs Concrete Instance (Object)</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p><strong>Class:</strong> A template/blueprint that defines attributes and methods. No memory allocated for data.<br>
+                    <strong>Object:</strong> A concrete instance of a class with actual values. Occupies memory.</p>
+                    <ul>
+                        <li>Class = Cookie cutter</li>
+                        <li>Object = Actual cookie</li>
+                    </ul>
+                    <div class="example-block">
+                        <strong>UML Class Notation:</strong> Rectangle divided into name, attributes, operations.<br>
+                        e.g., Class <code>Student</code> → Object: <code>student1</code> with values ("Amit", "MCA001")
+                    </div>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Class Diagram & Object Creator</h4>
+                    <div class="class-object-card">
+                        <div class="uml-class">
+                            <div class="uml-name">📘 Student</div>
+                            <div class="uml-attributes">
+                                <div>- name: String</div>
+                                <div>- enrollmentNo: String</div>
+                                <div>- course: String</div>
+                            </div>
+                            <div class="uml-methods">
+                                <div>+ payFee()</div>
+                                <div>+ registerCourse()</div>
+                            </div>
+                        </div>
+                        <div class="instance-area" id="objectArea">
+                            <div style="font-weight:600; margin-bottom:5px;">🔹 Objects (Instances)</div>
+                            <div id="objectList">
+                                <div style="background:#e9f3ef; border-radius:8px; padding:4px; margin:4px 0;">✨ student1: { name: "Amit", enroll: "MCA001", course: "MCA" }</div>
+                            </div>
+                            <button id="addObjectBtn" class="add-object-btn">+ Create New Student Object</button>
+                            <button id="resetObjectsBtn" style="background:#5f7f8c; margin-left:0.5rem;">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam-Style Q&A (5 PYQ-style with elaborated answers) -->
+    <div class="qa-section">
+        <h2>📝 Exam-Style Q&A (Elaborated for Mastery)</h2>
+        <div class="qa-item">
+            <div class="qa-question">Q1. What is object-oriented modeling? List the advantages of object-oriented modeling.</div>
+            <div class="qa-answer"><strong>Answer:</strong> Object-Oriented Modeling (OOM) is a methodology that uses objects and classes to represent real-world entities and their relationships. Instead of focusing on functions, OOM builds a system blueprint by identifying objects (like Student, Course) and their interactions. <strong>Advantages:</strong> 1) <strong>Real-world mapping:</strong> reduces complexity; 2) <strong>Reusability:</strong> classes can be reused across projects; 3) <strong>Maintainability:</strong> changes are localized; 4) <strong>Modularity:</strong> promotes independent development; 5) <strong>Incremental development:</strong> easier to evolve systems over time.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q2. Define abstraction. Explain how abstraction results in modularity.</div>
+            <div class="qa-answer"><strong>Answer:</strong> Abstraction is the principle of hiding implementation details and exposing only the essential characteristics of an object that are relevant to the context. For example, a <code>Student</code> class in a university system includes <code>name</code> and <code>enrollmentNo</code> but ignores personal hobbies. <strong>Modularity:</strong> By abstracting away unnecessary details, each class becomes a self-contained module with a clear interface. This enables developers to work on different modules simultaneously, and changes inside a module do not affect others, leading to high cohesion and low coupling.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q3. Differentiate between a Class and an Object with examples.</div>
+            <div class="qa-answer"><strong>Answer:</strong> A <strong>class</strong> is a logical blueprint or template that defines attributes and operations (e.g., <code>class Car { String model; void start(); }</code>). An <strong>object</strong> is a physical instance of a class with actual values (e.g., <code>Car myCar = new Car(); myCar.model = "Sedan";</code>). A class occupies no memory for data until an object is instantiated; objects occupy heap memory. In UML, the class defines the structure, while objects represent runtime entities.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q4. Explain the graphical representation of a Class in UML.</div>
+            <div class="qa-answer"><strong>Answer:</strong> In UML, a class is depicted as a rectangle partitioned into three compartments: <strong>Top compartment:</strong> class name (bold, centered). <strong>Middle compartment:</strong> list of attributes with visibility symbols (- for private, + for public) and types. <strong>Bottom compartment:</strong> list of operations/methods with parameters and return types. For example, the Student class shown in the interactive playground above follows this standard notation.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q5. Why is modeling considered a necessity for designing software systems?</div>
+            <div class="qa-answer"><strong>Answer:</strong> Modeling provides a visual abstraction of the system before implementation, allowing stakeholders to validate requirements early. It reduces ambiguity, manages complexity, and serves as documentation for developers. In OOAD, modeling (using UML) helps identify objects, relationships, and workflows, ensuring that the final system aligns with user needs and that design flaws are caught early, saving time and cost.</div>
+        </div>
+    </div>
+    <footer>📘 MCA Sem-2 Master Mentorship — Day 3: OOAD core principles. Interact with UML, abstraction toggles, and object instances for deeper understanding.</footer>
+</div>
+
+<script>
+    // ---- Abstraction Interactive (toggle essential attributes) ----
+    const essentialAttrs = {
+        name: "Name: Riya Sharma",
+        enroll: "Enrollment No: MCA24001",
+        course: "Course: MCA",
+        shoeSize: "Shoe Size: 7 (ignored)",
+        movie: "Fav Movie: Inception (ignored)"
+    };
+    let activeAbstraction = {
+        name: true,
+        enroll: true,
+        course: true,
+        shoeSize: false,
+        movie: false
+    };
+
+    function updateAbstractDisplay() {
+        const container = document.getElementById('abstractRepresentation');
+        let lines = ['<strong>Abstracted Student (University Context):</strong><br>'];
+        if (activeAbstraction.name) lines.push(`• ${essentialAttrs.name}`);
+        if (activeAbstraction.enroll) lines.push(`• ${essentialAttrs.enroll}`);
+        if (activeAbstraction.course) lines.push(`• ${essentialAttrs.course}`);
+        if (activeAbstraction.shoeSize) lines.push(`• ${essentialAttrs.shoeSize} (❌ not essential, should be hidden)`);
+        if (activeAbstraction.movie) lines.push(`• ${essentialAttrs.movie} (❌ irrelevant detail)`);
+        if (!activeAbstraction.name && !activeAbstraction.enroll && !activeAbstraction.course) {
+            lines.push('<span style="color:red;">⚠️ At least name/enroll/course needed for meaningful abstraction.</span>');
+        }
+        container.innerHTML = lines.join('<br>');
+        // sync toggle UI
+        document.querySelectorAll('.toggle-chip').forEach(chip => {
+            const attr = chip.getAttribute('data-attr');
+            if (activeAbstraction[attr]) chip.classList.add('active');
+            else chip.classList.remove('active');
+        });
+    }
+
+    document.querySelectorAll('.toggle-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            const attr = chip.getAttribute('data-attr');
+            if (attr === 'name' || attr === 'enroll' || attr === 'course') {
+                // essential can be toggled but we keep logical: abstraction teaching
+                activeAbstraction[attr] = !activeAbstraction[attr];
+            } else {
+                activeAbstraction[attr] = !activeAbstraction[attr];
+            }
+            updateAbstractDisplay();
+        });
+    });
+    updateAbstractDisplay();
+
+    // ---- Class vs Objects: dynamic object creator ----
+    let objectsArray = [
+        { name: "Amit", enroll: "MCA001", course: "MCA" }
+    ];
+    function renderObjectList() {
+        const listDiv = document.getElementById('objectList');
+        if (!listDiv) return;
+        if (objectsArray.length === 0) {
+            listDiv.innerHTML = '<div style="color:#6c8d9c;">No objects yet. Create an instance.</div>';
+            return;
+        }
+        listDiv.innerHTML = objectsArray.map((obj, idx) => `
+            <div style="background:#eef3ef; border-radius:8px; padding:6px; margin:5px 0; font-size:0.75rem;">
+                🧩 <strong>student${idx+1}</strong> { name: "${obj.name}", enrollment: "${obj.enroll}", course: "${obj.course}" }
+            </div>
+        `).join('');
+    }
+
+    function addNewObject() {
+        const newId = objectsArray.length + 1;
+        objectsArray.push({
+            name: `Student${newId}`,
+            enroll: `MCA00${newId}`,
+            course: "MCA"
+        });
+        renderObjectList();
+    }
+    function resetObjects() {
+        objectsArray = [{ name: "Amit", enroll: "MCA001", course: "MCA" }];
+        renderObjectList();
+    }
+
+    document.getElementById('addObjectBtn')?.addEventListener('click', addNewObject);
+    document.getElementById('resetObjectsBtn')?.addEventListener('click', resetObjects);
+    renderObjectList();
+
+    // Additional elaboration tooltips: make topic even richer
+    const allPlaygrounds = document.querySelectorAll('.playground');
+    // subtle addition: show a small elaboration note in the abstraction section
+    const abstractionNote = document.createElement('div');
+    abstractionNote.className = 'example-block';
+    abstractionNote.style.marginTop = '0.8rem';
+    abstractionNote.style.fontSize = '0.75rem';
+    abstractionNote.innerHTML = '🧠 <strong>Elaboration:</strong> Abstraction reduces cognitive load by hiding irrelevant details. In OOAD, we use abstraction to build class diagrams that represent only domain-specific properties.';
+    document.querySelector('.abstraction-demo')?.appendChild(abstractionNote);
+
+    const oomNote = document.createElement('div');
+    oomNote.className = 'example-block';
+    oomNote.style.marginTop = '0.6rem';
+    oomNote.style.fontSize = '0.75rem';
+    oomNote.innerHTML = '💡 <strong>Elaboration:</strong> OOM uses UML (Unified Modeling Language) to represent objects, classes, and relationships. It helps in requirement analysis and provides a traceable design.';
+    document.querySelector('#oomNoteTarget') || (() => {
+        const firstPlayground = document.querySelector('.topic-card:first-child .playground');
+        if (firstPlayground) firstPlayground.appendChild(oomNote);
+    })();
+
+    // extra class vs object elaboration paragraph in playground
+    const classObjElab = document.createElement('div');
+    classObjElab.className = 'example-block';
+    classObjElab.style.marginTop = '0.8rem';
+    classObjElab.style.fontSize = '0.75rem';
+    classObjElab.innerHTML = '🔬 <strong>Elaboration:</strong> A class defines structure and behavior (blueprint). Objects are runtime entities that hold state. Without objects, classes are just templates; objects make the system functional.';
+    document.querySelector('.class-object-card')?.appendChild(classObjElab);
+</script>
+</body>
+</html>
