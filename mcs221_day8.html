@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MCS-221 Day 8: Data Warehousing | Top-Down vs Bottom-Up | Data Marts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f0f4f0;
+            color: #1e2f2a;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+        }
+
+        .master-textbook {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .week-header {
+            background: linear-gradient(135deg, #2c5e3a 0%, #3f7e4a 100%);
+            border-radius: 2rem 2rem 1.8rem 1.8rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 12px 28px -12px rgba(0,0,0,0.3);
+        }
+        .week-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.3px;
+        }
+        .week-header h1 span {
+            background: #f4b942;
+            font-size: 1rem;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            margin-left: 0.8rem;
+            vertical-align: middle;
+            color: #1e2f1e;
+        }
+        .week-badge {
+            display: inline-block;
+            background: #f4b942cc;
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.6rem;
+            color: #1e3a1e;
+        }
+        .week-header p {
+            color: #e0f0e0;
+            margin-top: 0.8rem;
+        }
+
+        /* topics grid */
+        .topics-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border: 1px solid #d4e0d0;
+        }
+
+        .topic-title {
+            background: #fafef7;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #e0ecd8;
+        }
+        .topic-title h2 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #2c6e3e;
+        }
+        .topic-title p {
+            color: #5b7c60;
+            font-size: 0.9rem;
+        }
+
+        .theory-body {
+            padding: 1.5rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .explain-text {
+            background: #ffffff;
+        }
+        .explain-text h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #2c7a4a;
+            border-left: 5px solid #f4b942;
+            padding-left: 0.8rem;
+        }
+        .explain-text p, .explain-text li {
+            margin-bottom: 0.8rem;
+            color: #2c4a34;
+        }
+        .explain-text ul, .explain-text ol {
+            padding-left: 1.5rem;
+            margin: 0.7rem 0;
+        }
+        .example-block {
+            background: #fef9e8;
+            border-radius: 1.2rem;
+            padding: 0.9rem 1.2rem;
+            margin: 1rem 0;
+            border-left: 4px solid #f4b942;
+        }
+        .highlight-badge {
+            background: #e0f0dc;
+            padding: 0.1rem 0.4rem;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+
+        /* playground widgets */
+        .playground {
+            background: #fafef7;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            box-shadow: inset 0 0 0 1px #d8ecd8, 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .playground h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #2c7a4a;
+        }
+
+        /* Architecture Visual */
+        .arch-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+        .arch-card {
+            flex: 1;
+            min-width: 180px;
+            background: #fef9ef;
+            border-radius: 1rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #d4cfb0;
+        }
+        .arch-card.active {
+            border-color: #f4b942;
+            background: #fff7e8;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .arch-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .flow-diagram {
+            background: #eef3e8;
+            border-radius: 1rem;
+            padding: 0.8rem;
+            font-family: monospace;
+            font-size: 0.7rem;
+            margin-top: 0.8rem;
+        }
+
+        /* Data Mart Visual */
+        .mart-visual {
+            background: #eef3e8;
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+        .mart-types {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin: 0.8rem 0;
+        }
+        .mart-badge {
+            background: #d8e0cc;
+            border-radius: 40px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .mart-badge.active {
+            background: #f4b942;
+            color: #1e2f1e;
+            font-weight: 600;
+        }
+
+        button {
+            background: #3e8a5a;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            margin: 0.2rem;
+        }
+        button:hover {
+            background: #2c6e3e;
+        }
+
+        /* Q&A Section */
+        .qa-section {
+            background: white;
+            border-radius: 1.8rem;
+            margin-top: 2rem;
+            padding: 1.8rem 2rem;
+            border: 1px solid #d4e0d0;
+        }
+        .qa-section h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2c6e3e;
+            border-left: 5px solid #f4b942;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .qa-item {
+            margin-bottom: 1.8rem;
+            border-bottom: 1px solid #e0ecd8;
+            padding-bottom: 1rem;
+        }
+        .qa-question {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #2c7a4a;
+            margin-bottom: 0.5rem;
+        }
+        .qa-answer {
+            color: #2f5b48;
+            padding-left: 1rem;
+            border-left: 3px solid #f4b94280;
+        }
+
+        @media (max-width: 850px) {
+            .theory-body {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #6f8e70;
+        }
+    </style>
+</head>
+<body>
+<div class="master-textbook">
+    <div class="week-header">
+        <h1>📊 MCS-221: Data Warehousing & Data Mining <span>Day 8</span></h1>
+        <div class="week-badge">🌟 Week 2 | Enterprise Data Architecture</div>
+        <p>Top-Down (Inmon) vs Bottom-Up (Kimball) • Enterprise Data Warehouse • Data Marts (Dependent, Independent, Hybrid)</p>
+    </div>
+
+    <div class="topics-grid">
+        <!-- Topic 1: Top-Down vs Bottom-Up Approaches -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>🏛️ 1. Data Warehouse Design Approaches</h2>
+                <p>Top-Down (Inmon) vs Bottom-Up (Kimball) — two philosophies of building EDW</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p><strong>Top-Down (Bill Inmon):</strong> Build the centralized Enterprise Data Warehouse (EDW) first, then extract departmental Data Marts. Ensures enterprise-wide consistency but longer implementation time.</p>
+                    <p><strong>Bottom-Up (Ralph Kimball):</strong> Build departmental Data Marts first, then integrate them into a unified EDW. Faster ROI, iterative delivery.</p>
+                    <div class="example-block">
+                        🎓 <strong>University Example:</strong><br>
+                        • Top-Down: University builds central warehouse (all depts) → then extracts Library/HR marts.<br>
+                        • Bottom-Up: Library builds its mart, HR builds its own → later they merge into university warehouse.
+                    </div>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Interactive Architecture Explorer</h4>
+                    <div class="arch-container">
+                        <div class="arch-card" data-arch="topdown">
+                            <div class="arch-title">🔝 Top-Down (Inmon)</div>
+                            <div style="font-size:0.7rem;">EDW First → Data Marts later</div>
+                        </div>
+                        <div class="arch-card" data-arch="bottomup">
+                            <div class="arch-title">⬆️ Bottom-Up (Kimball)</div>
+                            <div style="font-size:0.7rem;">Data Marts First → Integrated EDW</div>
+                        </div>
+                    </div>
+                    <div id="archFlow" class="flow-diagram">
+                        💡 Click on an approach to see the flow diagram and explanation.
+                    </div>
+                    <div style="font-size:0.7rem; margin-top:0.5rem; text-align:center;">🏢 Enterprise Data Warehouse (EDW) vs Departmental Data Marts</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 2: Data Marts (Types & Structure) -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>📦 2. Data Marts</h2>
+                <p>Dependent · Independent · Hybrid — specialized subsets for business lines</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p>A <strong>Data Mart</strong> is a focused subset of a data warehouse, designed for a specific department (Sales, HR, Finance). Types:</p>
+                    <ul>
+                        <li><strong>Dependent Data Mart:</strong> Extracted from existing EDW (Top-Down).</li>
+                        <li><strong>Independent Data Mart:</strong> Built directly from operational sources (Bottom-Up).</li>
+                        <li><strong>Hybrid Data Mart:</strong> Combines data from EDW and operational sources.</li>
+                    </ul>
+                    <div class="example-block">
+                        🛒 <strong>Analogy:</strong> EDW = Supermarket (entire store). Data Mart = Electronics Section (specific department). Users go directly to relevant mart for faster access.
+                    </div>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Data Mart Explorer</h4>
+                    <div class="mart-visual">
+                        <div class="mart-types" id="martTypeSelector">
+                            <span data-mart="dependent" class="mart-badge">📌 Dependent Mart</span>
+                            <span data-mart="independent" class="mart-badge">🔌 Independent Mart</span>
+                            <span data-mart="hybrid" class="mart-badge">🔄 Hybrid Mart</span>
+                        </div>
+                        <div id="martDescription" style="background:#fff8e8; border-radius:1rem; padding:0.8rem; margin-top:0.8rem;">
+                            <strong>Dependent Data Mart:</strong> Created from existing Enterprise Data Warehouse. Ensures consistency across departments.
+                        </div>
+                        <div id="martSchemaNote" style="margin-top:0.8rem; font-size:0.7rem; background:#eef3e8; border-radius:0.8rem; padding:0.5rem;">
+                            📐 <strong>Common Schemas:</strong> Star Schema (fact + dimension tables) | Snowflake Schema (normalized dimensions)
+                        </div>
+                    </div>
+                    <button id="showStarSchemaBtn" style="margin-top:0.5rem;">⭐ Show Star Schema Example</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam-Style Q&A (5 PYQ) -->
+    <div class="qa-section">
+        <h2>📝 Exam-Style Questions & Answers (PYQ Focus)</h2>
+        <div class="qa-item">
+            <div class="qa-question">Q1. Differentiate between the Top-Down and Bottom-Up approaches to Data Warehouse design.</div>
+            <div class="qa-answer"><strong>Answer:</strong> <strong>Top-Down (Inmon):</strong> Enterprise Data Warehouse (EDW) built first, then data marts derived from EDW. Ensures consistency, long implementation. <strong>Bottom-Up (Kimball):</strong> Departmental data marts built first, later integrated into EDW. Faster implementation, quicker ROI.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q2. Define a Data Mart. How is it different from a centralized data warehouse? (Frequent PYQ)</div>
+            <div class="qa-answer"><strong>Answer:</strong> A <strong>Data Mart</strong> is a subset of a data warehouse focused on a single subject area (e.g., Sales). <strong>Differences:</strong> Data Warehouse is enterprise-wide, massive (hundreds of GB to TB), supports strategic decisions. Data Mart is department-specific, smaller (under 100 GB), supports tactical decisions and can be built faster.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q3. What are the three different types of Data Marts?</div>
+            <div class="qa-answer"><strong>Answer:</strong> 1. <strong>Dependent:</strong> Extracted from central EDW. 2. <strong>Independent:</strong> Built directly from operational sources without EDW. 3. <strong>Hybrid:</strong> Combines data from both EDW and operational systems.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q4. Discuss the benefits of using a Data Mart.</div>
+            <div class="qa-answer"><strong>Answer:</strong> 1. <strong>Cost-efficiency:</strong> Lower cost than full warehouse. 2. <strong>Faster implementation:</strong> Weeks/months vs years. 3. <strong>Simplified access:</strong> Users query only relevant data. 4. <strong>Improved query performance:</strong> Smaller datasets enable faster analytics.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q5. Briefly discuss the structure of a Data Mart.</div>
+            <div class="qa-answer"><strong>Answer:</strong> Data marts typically use multidimensional schemas: <strong>Star Schema</strong> — central fact table (measurable metrics) surrounded by denormalized dimension tables. <strong>Snowflake Schema</strong> — normalized dimensions to reduce redundancy. Star schema offers faster queries with fewer joins.</div>
+        </div>
+    </div>
+    <footer>📘 MCA Sem-2 Master Mentorship — Day 8: Data Warehousing Foundations. Next: Day 9 — OLTP vs OLAP & Data Cube Operations!</footer>
+</div>
+
+<script>
+    // ----- Top-Down vs Bottom-Up Interactive -----
+    const archCards = document.querySelectorAll('.arch-card');
+    const archFlowDiv = document.getElementById('archFlow');
+
+    function updateArchitecture(approach) {
+        if (approach === 'topdown') {
+            archFlowDiv.innerHTML = `
+                <strong>🔝 Top-Down (Inmon) Architecture Flow:</strong><br>
+                📊 Operational Sources → 📦 Enterprise Data Warehouse (EDW) → 📁 Dependent Data Marts (Sales, HR, Finance)<br>
+                <span style="color:#2c6e3e;">✅ Pros: Enterprise-wide consistency, single source of truth. ⏱️ Cons: Long implementation time.</span>
+            `;
+        } else {
+            archFlowDiv.innerHTML = `
+                <strong>⬆️ Bottom-Up (Kimball) Architecture Flow:</strong><br>
+                📊 Operational Sources → 📁 Independent Data Marts (Sales, HR, Marketing) → 🔗 Integration → 🏛️ Enterprise Data Warehouse (EDW)<br>
+                <span style="color:#2c6e3e;">✅ Pros: Faster ROI, iterative delivery. ⚠️ Cons: Risk of data inconsistency across marts.</span>
+            `;
+        }
+    }
+
+    archCards.forEach(card => {
+        card.addEventListener('click', () => {
+            archCards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            const approach = card.getAttribute('data-arch');
+            updateArchitecture(approach);
+        });
+    });
+    // set default active
+    document.querySelector('.arch-card[data-arch="topdown"]').classList.add('active');
+    updateArchitecture('topdown');
+
+    // ----- Data Mart Types Interactive -----
+    const martBadges = document.querySelectorAll('.mart-badge');
+    const martDescDiv = document.getElementById('martDescription');
+
+    function updateMartDescription(type) {
+        if (type === 'dependent') {
+            martDescDiv.innerHTML = `<strong>📌 Dependent Data Mart:</strong> Created by extracting a subset from an existing Enterprise Data Warehouse (EDW). Ensures data consistency across the organization. Follows Top-Down approach.`;
+        } else if (type === 'independent') {
+            martDescDiv.innerHTML = `<strong>🔌 Independent Data Mart:</strong> Built directly from operational sources without a central EDW. Faster to deploy but may lead to data silos. Follows Bottom-Up approach.`;
+        } else {
+            martDescDiv.innerHTML = `<strong>🔄 Hybrid Data Mart:</strong> Combines data from both an existing EDW and direct operational sources. Offers flexibility for departments needing both enterprise and real-time data.`;
+        }
+    }
+
+    martBadges.forEach(badge => {
+        badge.addEventListener('click', () => {
+            martBadges.forEach(b => b.classList.remove('active'));
+            badge.classList.add('active');
+            const type = badge.getAttribute('data-mart');
+            updateMartDescription(type);
+        });
+    });
+    // set default dependent active
+    document.querySelector('.mart-badge[data-mart="dependent"]').classList.add('active');
+    updateMartDescription('dependent');
+
+    // Star Schema example popup / inline display
+    const showSchemaBtn = document.getElementById('showStarSchemaBtn');
+    let schemaVisible = false;
+    const schemaNoteDiv = document.getElementById('martSchemaNote');
+
+    showSchemaBtn.addEventListener('click', () => {
+        if (!schemaVisible) {
+            schemaNoteDiv.innerHTML = `
+                📐 <strong>Star Schema Example (Sales Data Mart):</strong><br>
+                ⭐ <strong>Fact Table:</strong> Sales (SaleID, DateID, ProductID, CustomerID, Amount, Quantity)<br>
+                📊 <strong>Dimension Tables:</strong> Date (DateID, Day, Month, Year), Product (ProductID, Name, Category), Customer (CustomerID, Name, Region)<br>
+                🚀 Benefits: Fewer joins, faster query performance for analytical queries.
+            `;
+            schemaVisible = true;
+            showSchemaBtn.textContent = '❄️ Show Snowflake Schema Example';
+        } else {
+            schemaNoteDiv.innerHTML = `
+                ❄️ <strong>Snowflake Schema Example (Sales Data Mart):</strong><br>
+                ⭐ <strong>Fact Table:</strong> Sales (SaleID, DateID, ProductID, CustomerID, Amount)<br>
+                📊 <strong>Normalized Dimensions:</strong> Date → Year, Month, Day (separate tables); Product → Category (separate); Customer → City, Region. Reduces redundancy but increases joins.<br>
+                ⚖️ Trade-off: Saves storage, may reduce query speed.
+            `;
+            schemaVisible = false;
+            showSchemaBtn.textContent = '⭐ Show Star Schema Example';
+        }
+    });
+
+    // Additional elaboration notes
+    const archPlayground = document.querySelector('.arch-container')?.parentElement;
+    if (archPlayground) {
+        const archNote = document.createElement('div');
+        archNote.className = 'example-block';
+        archNote.style.marginTop = '0.8rem';
+        archNote.style.fontSize = '0.7rem';
+        archNote.innerHTML = '📌 <strong>Inmon vs Kimball:</strong> Inmon: "Data Warehouse is subject-oriented, integrated, non-volatile, time-variant." Kimball: "Data Warehouse is a conformed dimension of data marts." Both are valid; choose based on organizational needs.';
+        archPlayground.appendChild(archNote);
+    }
+
+    const martPlayground = document.querySelector('.mart-visual')?.parentElement;
+    if (martPlayground) {
+        const martNote = document.createElement('div');
+        martNote.className = 'example-block';
+        martNote.style.marginTop = '0.6rem';
+        martNote.style.fontSize = '0.7rem';
+        martNote.innerHTML = '💡 <strong>Lab Context:</strong> In MCSL-222, you may design a data mart schema using Star/Snowflake for a specific domain like "Library Management" or "Sales Analytics".';
+        martPlayground.appendChild(martNote);
+    }
+</script>
+</body>
+</html>
