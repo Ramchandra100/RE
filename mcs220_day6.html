@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MCS-220 Day 6: Web Technologies | Servlet Life Cycle | Session Management & Cookies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #f0f5fa;
+            color: #1e2f3a;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+        }
+
+        .master-textbook {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .day-header {
+            background: linear-gradient(135deg, #1f5a6e 0%, #368097 100%);
+            border-radius: 2rem 2rem 1.8rem 1.8rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 12px 28px -12px rgba(0,0,0,0.25);
+        }
+        .day-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.3px;
+        }
+        .day-header h1 span {
+            background: #f4b942;
+            font-size: 1rem;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            margin-left: 0.8rem;
+            vertical-align: middle;
+            color: #1e2f3a;
+        }
+        .day-badge {
+            display: inline-block;
+            background: #f4b942cc;
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.6rem;
+            color: #1e3a44;
+        }
+        .day-header p {
+            color: #d4e9f2;
+            margin-top: 0.8rem;
+        }
+
+        /* topics grid */
+        .topics-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2ecf3;
+        }
+
+        .topic-title {
+            background: #fbfefd;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #eef3f8;
+        }
+        .topic-title h2 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #2c7a6b;
+        }
+        .topic-title p {
+            color: #5b7c8c;
+            font-size: 0.9rem;
+        }
+
+        .theory-body {
+            padding: 1.5rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .explain-text {
+            background: #ffffff;
+        }
+        .explain-text h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #2c7a6b;
+            border-left: 5px solid #f4b942;
+            padding-left: 0.8rem;
+        }
+        .explain-text p, .explain-text li {
+            margin-bottom: 0.8rem;
+            color: #2c4a5a;
+        }
+        .explain-text ul, .explain-text ol {
+            padding-left: 1.5rem;
+            margin: 0.7rem 0;
+        }
+        .example-block {
+            background: #fef9e8;
+            border-radius: 1.2rem;
+            padding: 0.9rem 1.2rem;
+            margin: 1rem 0;
+            border-left: 4px solid #f4b942;
+        }
+        .highlight-badge {
+            background: #e9f3f0;
+            padding: 0.1rem 0.4rem;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+        .lifecycle-note {
+            background: #eef3fa;
+            border-radius: 1rem;
+            padding: 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        /* playground widgets */
+        .playground {
+            background: #fafdfe;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            box-shadow: inset 0 0 0 1px #e4eff6, 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .playground h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #2c7a6b;
+        }
+
+        /* Servlet Life Cycle Visual */
+        .lifecycle-stage {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        .stage-card {
+            background: #eef2f0;
+            border-radius: 1rem;
+            padding: 0.8rem;
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        .stage-card.active {
+            background: #f4b94220;
+            border-color: #f4b942;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .stage-title {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        .stage-desc {
+            font-size: 0.7rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Session & Cookie Simulator */
+        .cookie-sim {
+            background: #fef7e8;
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+        .cookie-status {
+            background: #e2e9f0;
+            border-radius: 0.8rem;
+            padding: 0.6rem;
+            margin: 0.5rem 0;
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+        .session-counter {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2c7a6b;
+        }
+
+        button {
+            background: #3e8a7a;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.1s;
+        }
+        button:hover {
+            background: #1e6b5e;
+            transform: translateY(-1px);
+        }
+        .secondary-btn {
+            background: #5f7f8c;
+        }
+        .danger-btn {
+            background: #b5654b;
+        }
+
+        /* Q&A Section */
+        .qa-section {
+            background: white;
+            border-radius: 1.8rem;
+            margin-top: 2rem;
+            padding: 1.8rem 2rem;
+            border: 1px solid #e2ecf3;
+        }
+        .qa-section h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #1e6b5e;
+            border-left: 5px solid #f4b942;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .qa-item {
+            margin-bottom: 1.8rem;
+            border-bottom: 1px solid #eaf0f5;
+            padding-bottom: 1rem;
+        }
+        .qa-question {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #2c7a6b;
+            margin-bottom: 0.5rem;
+        }
+        .qa-answer {
+            color: #2f5b68;
+            padding-left: 1rem;
+            border-left: 3px solid #f4b94280;
+        }
+
+        @media (max-width: 850px) {
+            .theory-body {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #6f8ea0;
+        }
+    </style>
+</head>
+<body>
+<div class="master-textbook">
+    <div class="day-header">
+        <h1>⚙️ MCS-220: Web Technologies <span>Day 6</span></h1>
+        <div class="day-badge">🧬 Servlet Life Cycle | Session Management & Cookies | Stateful Web Apps</div>
+        <p>init() · service() · destroy() — and how HTTP becomes stateful with session tracking and cookies</p>
+    </div>
+
+    <div class="topics-grid">
+        <!-- Topic 1: Servlet Life Cycle -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>🔄 1. The Servlet Life Cycle</h2>
+                <p>init() → service() → destroy() — controlled by the Web Container</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p>A Servlet's life is strictly managed by the <strong>Web Container</strong> (e.g., Apache Tomcat). Three core methods define its existence:</p>
+                    <ul>
+                        <li><strong>init():</strong> Called exactly once when the servlet is first loaded. Used for one-time setup (DB connections, configuration).</li>
+                        <li><strong>service():</strong> Called for every client request. Handles request/response logic (doGet/doPost in HttpServlet).</li>
+                        <li><strong>destroy():</strong> Called exactly once before servlet is unloaded (server shutdown). Cleanup resources.</li>
+                    </ul>
+                    <div class="example-block">
+                        🧪 <strong>Lab Insight (MCSL-222):</strong> First hit after starting Tomcat triggers <code>init()</code> (slight delay). Rapid refreshes only call <code>service()</code>. Server stop triggers <code>destroy()</code>.
+                    </div>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Interactive Life Cycle Simulator</h4>
+                    <div class="lifecycle-stage" id="lifecycleStages">
+                        <div class="stage-card" data-stage="init">
+                            <div class="stage-title">🔧 init()</div>
+                            <div class="stage-desc">One-time setup<br>DB connection</div>
+                        </div>
+                        <div class="stage-card" data-stage="service">
+                            <div class="stage-title">📨 service()</div>
+                            <div class="stage-desc">Per request<br>Handles HTTP</div>
+                        </div>
+                        <div class="stage-card" data-stage="destroy">
+                            <div class="stage-title">🧹 destroy()</div>
+                            <div class="stage-desc">Cleanup<br>Server shutdown</div>
+                        </div>
+                    </div>
+                    <div id="lifecycleLog" class="cookie-status" style="background:#eef3fa; min-height: 70px;">
+                        💡 Click any stage to see method description and simulation.
+                    </div>
+                    <button id="simulateFirstRequestBtn" style="width:100%; margin-top:0.3rem;">🚀 Simulate First Request (init + service)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic 2: Session Management & Cookies -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>🍪 2. Session Management & Cookies</h2>
+                <p>Overcoming HTTP statelessness — session cookies & persistent cookies</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Explain</h3>
+                    <p>HTTP is <strong>stateless</strong> — each request is independent. Session management creates "memory" across requests. <strong>Cookies</strong> are small text files stored by the browser and sent with every request.</p>
+                    <ul>
+                        <li><strong>Non-Persistent (Session Cookie):</strong> Lives in browser memory, deleted when browser closes. Used for login sessions.</li>
+                        <li><strong>Persistent Cookie:</strong> Stored on hard drive, has expiry date. Used for "Remember Me" features.</li>
+                    </ul>
+                    <div class="example-block">
+                        🛒 <strong>Example:</strong> Shopping cart uses session cookie to track items. "Remember Me" checkbox creates persistent cookie.
+                    </div>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Session & Cookie Simulator</h4>
+                    <div class="cookie-sim">
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                            <button id="visitPageBtn">🌐 Visit Page (Simulate Request)</button>
+                            <button id="closeBrowserBtn" class="secondary-btn">🚪 Close Browser (End Session)</button>
+                            <button id="setRememberMeBtn" class="secondary-btn">✅ Set "Remember Me" (Persistent)</button>
+                            <button id="clearCookiesBtn" class="danger-btn">🗑️ Clear All Cookies</button>
+                        </div>
+                        <div id="sessionStatus" class="cookie-status" style="margin-top: 1rem;">
+                            📊 <strong>Session State:</strong> No active session.<br>
+                            🍪 Cookies: none
+                        </div>
+                        <div id="requestCounter" class="session-counter" style="text-align: center; margin-top: 0.5rem;">
+                            Requests in this session: <span id="counterValue">0</span>
+                        </div>
+                        <p style="font-size:0.65rem; margin-top:0.5rem;">💡 Simulates how server remembers you using cookies. Persistent cookie survives "browser close".</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam-Style Q&A (5 PYQ) -->
+    <div class="qa-section">
+        <h2>📝 Exam-Style Questions & Answers (Check Your Progress)</h2>
+        <div class="qa-item">
+            <div class="qa-question">Q1. Explain the Servlet Life Cycle. (Highly repeated PYQ)</div>
+            <div class="qa-answer"><strong>Answer:</strong> The Servlet Life Cycle consists of three phases managed by the Web Container: <strong>1. Initialization (init()):</strong> Called once when servlet is instantiated — used for one-time setup. <strong>2. Servicing (service()):</strong> Called for each client request — processes request and generates response. In HttpServlet, service() delegates to doGet/doPost. <strong>3. Destruction (destroy()):</strong> Called once before servlet is unloaded — releases resources like database connections.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q2. Compare the Generic Servlet with HTTP Servlet.</div>
+            <div class="qa-answer"><strong>Answer:</strong> <strong>GenericServlet:</strong> Protocol-independent, abstract class implementing Servlet interface. Provides basic lifecycle methods; service() is abstract. <strong>HttpServlet:</strong> Extends GenericServlet, designed specifically for HTTP protocol. Overrides service() to route requests to doGet(), doPost(), doPut(), etc. Used for web applications.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q3. Why is Session Management required in web applications?</div>
+            <div class="qa-answer"><strong>Answer:</strong> Session management is required because the HTTP protocol is <strong>stateless</strong>. Without it, the server cannot identify returning users across multiple requests. Applications like shopping carts, user authentication, and personalized experiences depend on session tracking to maintain state.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q4. Discuss the role of cookies in session management.</div>
+            <div class="qa-answer"><strong>Answer:</strong> Cookies act as a client-side storage mechanism for session identifiers. When a user first visits, the server generates a unique Session ID and sends it as a cookie. The browser stores it and sends it back with subsequent requests. The server reads the cookie, retrieves the associated session data, and thus recognizes the returning user.</div>
+        </div>
+        <div class="qa-item">
+            <div class="qa-question">Q5. How do persistent cookies differ from non-persistent cookies?</div>
+            <div class="qa-answer"><strong>Answer:</strong> <strong>Non-Persistent (Session) Cookies:</strong> Stored in browser memory, no expiry date, deleted when browser closes. Used for short-term session tracking. <strong>Persistent Cookies:</strong> Stored on hard drive, have a set expiry date (Max-Age), survive browser restarts. Used for "Remember Me" functionality and long-term preferences.</div>
+        </div>
+    </div>
+    <footer>📘 MCA Sem-2 Master Mentorship — Day 6: Servlet Life Cycle + Session Management. Tomorrow: MCSL-222 Lab — StarUML diagrams & Tomcat setup!</footer>
+</div>
+
+<script>
+    // ----- Servlet Life Cycle Interactive -----
+    const stageCards = document.querySelectorAll('.stage-card');
+    const lifecycleLog = document.getElementById('lifecycleLog');
+    const simulateBtn = document.getElementById('simulateFirstRequestBtn');
+
+    function updateLifecycleLog(stage) {
+        if (stage === 'init') {
+            lifecycleLog.innerHTML = '🔧 <strong>init()</strong> called: Servlet instantiated. One-time setup performed (e.g., DB connection pool created).';
+        } else if (stage === 'service') {
+            lifecycleLog.innerHTML = '📨 <strong>service()</strong> called: Handling client request. doGet/doPost invoked. Response generated.';
+        } else if (stage === 'destroy') {
+            lifecycleLog.innerHTML = '🧹 <strong>destroy()</strong> called: Servlet being removed. Cleanup resources (close DB connections, release handles).';
+        }
+    }
+
+    function highlightStage(stage) {
+        stageCards.forEach(card => {
+            card.classList.remove('active');
+            if (card.getAttribute('data-stage') === stage) {
+                card.classList.add('active');
+            }
+        });
+    }
+
+    stageCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const stage = card.getAttribute('data-stage');
+            updateLifecycleLog(stage);
+            highlightStage(stage);
+        });
+    });
+
+    let initCalled = false;
+    simulateBtn.addEventListener('click', () => {
+        if (!initCalled) {
+            updateLifecycleLog('init');
+            highlightStage('init');
+            initCalled = true;
+            setTimeout(() => {
+                updateLifecycleLog('service');
+                highlightStage('service');
+                lifecycleLog.innerHTML += '<br>✅ First request simulation complete: init() then service().';
+            }, 1500);
+        } else {
+            updateLifecycleLog('service');
+            highlightStage('service');
+            lifecycleLog.innerHTML = '📨 <strong>service()</strong> called again (init already performed). Rapid request handling.';
+        }
+    });
+
+    // ----- Session & Cookie Simulator (Stateful simulation) -----
+    let sessionActive = false;
+    let requestCount = 0;
+    let persistentCookie = false; // "Remember Me" flag
+
+    const sessionStatusDiv = document.getElementById('sessionStatus');
+    const counterSpan = document.getElementById('counterValue');
+    const visitBtn = document.getElementById('visitPageBtn');
+    const closeBrowserBtn = document.getElementById('closeBrowserBtn');
+    const setRememberMeBtn = document.getElementById('setRememberMeBtn');
+    const clearCookiesBtn = document.getElementById('clearCookiesBtn');
+
+    function updateUI() {
+        let statusMsg = '';
+        if (sessionActive) {
+            statusMsg = `📊 <strong>Session Active</strong> (Session ID: SIM-${Math.floor(Math.random()*10000)})<br>🍪 Cookies: `;
+            if (persistentCookie) {
+                statusMsg += `Persistent cookie "remember_user" present (expires: 7 days) + session cookie.`;
+            } else {
+                statusMsg += `Session cookie only (deleted on browser close).`;
+            }
+        } else {
+            statusMsg = `📊 <strong>Session State:</strong> No active session.<br>🍪 Cookies: none or expired.`;
+            if (persistentCookie) {
+                statusMsg = `📊 <strong>Session State:</strong> Persistent cookie exists but session expired? Click "Visit Page" to restore session.<br>🍪 Persistent cookie present.`;
+            }
+        }
+        sessionStatusDiv.innerHTML = statusMsg;
+        counterSpan.textContent = requestCount;
+    }
+
+    function startNewSession() {
+        sessionActive = true;
+        if (!persistentCookie) {
+            // non-persistent session cookie only
+        }
+        requestCount = 0;
+        updateUI();
+    }
+
+    function visitPage() {
+        if (!sessionActive) {
+            // if persistent cookie exists, restore session
+            if (persistentCookie) {
+                sessionActive = true;
+                requestCount = 0;
+                updateUI();
+                sessionStatusDiv.innerHTML += '<br>🔁 Persistent cookie detected! Session restored.';
+            } else {
+                // brand new session
+                sessionActive = true;
+                requestCount = 0;
+                updateUI();
+                sessionStatusDiv.innerHTML += '<br>✨ New session started (session cookie created).';
+            }
+        } else {
+            // existing session
+            requestCount++;
+            updateUI();
+            sessionStatusDiv.innerHTML += `<br>📄 Request #${requestCount} processed — session cookie sent back.`;
+        }
+    }
+
+    function closeBrowser() {
+        if (!persistentCookie) {
+            sessionActive = false;
+            requestCount = 0;
+            updateUI();
+            sessionStatusDiv.innerHTML += '<br>🚪 Browser closed. Non-persistent session cookie destroyed.';
+        } else {
+            sessionActive = false;
+            requestCount = 0;
+            updateUI();
+            sessionStatusDiv.innerHTML += '<br>🚪 Browser closed. Persistent cookie remains on disk (session lost but cookie still there).';
+        }
+    }
+
+    function setRememberMe() {
+        persistentCookie = true;
+        if (sessionActive) {
+            updateUI();
+            sessionStatusDiv.innerHTML += '<br>✅ "Remember Me" enabled! Persistent cookie stored (expires in 7 days).';
+        } else {
+            updateUI();
+            sessionStatusDiv.innerHTML += '<br>✅ Persistent cookie set. Next visit will auto-restore session.';
+        }
+    }
+
+    function clearAllCookies() {
+        persistentCookie = false;
+        sessionActive = false;
+        requestCount = 0;
+        updateUI();
+        sessionStatusDiv.innerHTML += '<br>🗑️ All cookies cleared (session & persistent). Session terminated.';
+    }
+
+    visitBtn.addEventListener('click', visitPage);
+    closeBrowserBtn.addEventListener('click', closeBrowser);
+    setRememberMeBtn.addEventListener('click', setRememberMe);
+    clearCookiesBtn.addEventListener('click', clearAllCookies);
+
+    // initial state
+    startNewSession();
+    updateUI();
+
+    // Additional elaboration notes for both playgrounds
+    const servletPlayground = document.querySelector('.lifecycle-stage')?.parentElement;
+    if (servletPlayground) {
+        const extraNote = document.createElement('div');
+        extraNote.className = 'example-block';
+        extraNote.style.marginTop = '0.8rem';
+        extraNote.style.fontSize = '0.7rem';
+        extraNote.innerHTML = '📌 <strong>Elaboration:</strong> In HttpServlet, service() automatically calls doGet() or doPost() based on HTTP method. Override these in your lab exercises.';
+        servletPlayground.appendChild(extraNote);
+    }
+
+    const cookiePlayground = document.querySelector('.cookie-sim')?.parentElement;
+    if (cookiePlayground) {
+        const cookieExtra = document.createElement('div');
+        cookieExtra.className = 'example-block';
+        cookieExtra.style.marginTop = '0.6rem';
+        cookieExtra.style.fontSize = '0.7rem';
+        cookieExtra.innerHTML = '🍪 <strong>Real-world:</strong> Session cookies are used for login; persistent cookies for "Keep me signed in". Servers set cookies via <code>HttpServletResponse.addCookie()</code>.';
+        cookiePlayground.appendChild(cookieExtra);
+    }
+</script>
+</body>
+</html>
