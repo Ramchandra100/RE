@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MCSL-222 Day 7: Super Sunday Lab | StarUML Setup | Tomcat & Servlet Deployment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #eaf4e8 0%, #d9e4ec 100%);
+            color: #1e2f3a;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+        }
+
+        .master-textbook {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .lab-header {
+            background: linear-gradient(135deg, #2c5a2e 0%, #3e7a45 100%);
+            border-radius: 2rem 2rem 1.8rem 1.8rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 12px 28px -12px rgba(0,0,0,0.3);
+        }
+        .lab-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.3px;
+        }
+        .lab-header h1 span {
+            background: #f4b942;
+            font-size: 1rem;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            margin-left: 0.8rem;
+            vertical-align: middle;
+            color: #1e2f3a;
+        }
+        .week-badge {
+            display: inline-block;
+            background: #f4b942cc;
+            padding: 0.25rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.6rem;
+            color: #1e3a1e;
+        }
+        .lab-header p {
+            color: #e0f0e0;
+            margin-top: 0.8rem;
+        }
+
+        /* topics grid */
+        .topics-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 1.8rem;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border: 1px solid #d4e2d4;
+        }
+
+        .topic-title {
+            background: #f9fef7;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #e0f0e0;
+        }
+        .topic-title h2 {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: #2c6e3e;
+        }
+        .topic-title p {
+            color: #5b7c68;
+            font-size: 0.9rem;
+        }
+
+        .theory-body {
+            padding: 1.5rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .explain-text {
+            background: #ffffff;
+        }
+        .explain-text h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #2c7a4a;
+            border-left: 5px solid #f4b942;
+            padding-left: 0.8rem;
+        }
+        .explain-text p, .explain-text li {
+            margin-bottom: 0.8rem;
+            color: #2c4a3a;
+        }
+        .explain-text ul, .explain-text ol {
+            padding-left: 1.5rem;
+            margin: 0.7rem 0;
+        }
+        .example-block {
+            background: #fef9e8;
+            border-radius: 1.2rem;
+            padding: 0.9rem 1.2rem;
+            margin: 1rem 0;
+            border-left: 4px solid #f4b942;
+        }
+        .code-block {
+            background: #1e2f2a;
+            color: #e0f0e0;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            overflow-x: auto;
+            margin: 0.8rem 0;
+        }
+
+        /* playground widgets */
+        .playground {
+            background: #fafef7;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            box-shadow: inset 0 0 0 1px #d8ecd8, 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .playground h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #2c7a4a;
+        }
+
+        /* UML Diagram Builder Simulation */
+        .uml-builder {
+            background: #fef9ef;
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+        .canvas-preview {
+            background: #fffef7;
+            border: 2px dashed #c0cfb0;
+            border-radius: 1rem;
+            min-height: 180px;
+            padding: 0.8rem;
+            position: relative;
+            margin-bottom: 0.8rem;
+        }
+        .class-preview {
+            display: inline-block;
+            background: #fff5e6;
+            border: 2px solid #cbc29e;
+            border-radius: 12px;
+            padding: 0.4rem 0.8rem;
+            margin: 0.3rem;
+            font-size: 0.7rem;
+        }
+        .relation-preview {
+            font-size: 1.2rem;
+            margin: 0 0.2rem;
+        }
+
+        /* Tomcat Servlet Simulator */
+        .tomcat-sim {
+            background: #f0f6ea;
+            border-radius: 1rem;
+            padding: 1rem;
+        }
+        .server-status {
+            background: #1e2f2a;
+            color: #b3ffcf;
+            padding: 0.6rem;
+            border-radius: 0.8rem;
+            font-family: monospace;
+            font-size: 0.7rem;
+        }
+        .terminal-line {
+            font-family: monospace;
+            font-size: 0.7rem;
+            margin: 0.2rem 0;
+        }
+
+        button {
+            background: #3e8a5a;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.1s;
+            margin: 0.2rem;
+        }
+        button:hover {
+            background: #2c6e3e;
+            transform: translateY(-1px);
+        }
+        .secondary-btn {
+            background: #5f7f68;
+        }
+
+        /* Viva Section */
+        .viva-section {
+            background: white;
+            border-radius: 1.8rem;
+            margin-top: 2rem;
+            padding: 1.8rem 2rem;
+            border: 1px solid #d4e2d4;
+        }
+        .viva-section h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #2c6e3e;
+            border-left: 5px solid #f4b942;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .viva-item {
+            margin-bottom: 1.8rem;
+            border-bottom: 1px solid #e0ece0;
+            padding-bottom: 1rem;
+        }
+        .viva-question {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #2c7a4a;
+            margin-bottom: 0.5rem;
+        }
+        .viva-answer {
+            color: #2f5b48;
+            padding-left: 1rem;
+            border-left: 3px solid #f4b94280;
+        }
+
+        @media (max-width: 850px) {
+            .theory-body {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #6f8e70;
+        }
+        .congrats {
+            background: #e8f0e5;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="master-textbook">
+    <div class="lab-header">
+        <h1>🧪 MCSL-222: Super Sunday Lab Session <span>Day 7</span></h1>
+        <div class="week-badge">🎉 Week 1 Completion | Hands-on: StarUML + Apache Tomcat</div>
+        <p>Practical lab: Drawing UML Class Diagrams (Aggregation) + Deploying your first Servlet in Tomcat — apply OOAD & Web Tech theory!</p>
+    </div>
+
+    <div class="topics-grid">
+        <!-- Part 1: StarUML & Class Diagrams -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>📐 1. OOAD Lab: StarUML & Class Diagrams</h2>
+                <p>Drawing structural models — Aggregation, Association, and more</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Setup & Walkthrough</h3>
+                    <p><strong>StarUML</strong> is a lightweight UML tool used in MCSL-222. Steps:</p>
+                    <ol>
+                        <li>Download from staruml.io → Install.</li>
+                        <li>Create project → Add Diagram → Class Diagram.</li>
+                        <li>Use toolbox: <strong>Class</strong> icon → place classes (e.g., University, School).</li>
+                        <li>Right-click class → Add Attribute (<code>+ name: String</code>).</li>
+                        <li>Select <strong>Aggregation</strong> (hollow diamond) → drag from Whole (University) to Part (School).</li>
+                    </ol>
+                    <div class="example-block">
+                        🏛️ <strong>Lab Exercise:</strong> Create a Library Management System class diagram with classes: <code>Library</code>, <code>Book</code>, <code>Member</code>. Add aggregation (Library contains Books).
+                    </div>
+                    <div class="code-block">
+                        UML Tip: Interface is shown with «interface» stereotype. Aggregation = hollow diamond, Composition = filled diamond.
+                    </div>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Interactive UML Builder (Simulation)</h4>
+                    <div class="uml-builder">
+                        <div class="canvas-preview" id="umlCanvas">
+                            <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.5rem;">
+                                <div class="class-preview">🏛️ University<br>+ name: String</div>
+                                <span class="relation-preview">◇—</span>
+                                <div class="class-preview">📚 School<br>+ schoolName: String</div>
+                                <span class="relation-preview">◇—</span>
+                                <div class="class-preview">📖 Department<br>+ deptCode: String</div>
+                            </div>
+                            <div style="font-size:0.65rem; margin-top:0.5rem; text-align:center;">🔹 Hollow diamond = Aggregation (whole-part)</div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+                            <button id="addBookClassBtn">📘 Add Book Class</button>
+                            <button id="addLibraryAggBtn">🏛️ Add Library → Books Aggregation</button>
+                            <button id="resetUmlBtn" class="secondary-btn">⟳ Reset Diagram</button>
+                        </div>
+                        <div id="umlLog" style="margin-top:0.8rem; font-size:0.7rem; background:#eef3e8; border-radius:0.8rem; padding:0.4rem;">
+                            💡 Click buttons to simulate adding classes & aggregation relationships.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Part 2: Tomcat & Servlet Deployment -->
+        <div class="topic-card">
+            <div class="topic-title">
+                <h2>🐱 2. Web Tech Lab: Apache Tomcat & Servlet Deployment</h2>
+                <p>Web Container setup, web.xml, and running your first servlet</p>
+            </div>
+            <div class="theory-body">
+                <div class="explain-text">
+                    <h3>📖 Setup & Walkthrough</h3>
+                    <p><strong>Apache Tomcat</strong> = Web Server + Web Container. Steps:</p>
+                    <ol>
+                        <li>Download Tomcat 9/10 (zip) → extract.</li>
+                        <li>Navigate to <code>bin/</code> → run <code>startup.bat</code> (Windows) or <code>./startup.sh</code> (Mac/Linux).</li>
+                        <li>Visit <code>http://localhost:8080</code> → welcome page confirms server is running.</li>
+                        <li>Deploy Servlet: Write a Java class extending <code>HttpServlet</code>, override <code>doGet()</code>.</li>
+                        <li>Compile, place in <code>webapps/ROOT/WEB-INF/classes/</code>, map in <code>web.xml</code>.</li>
+                    </ol>
+                    <div class="example-block">
+                        📝 <strong>Sample web.xml mapping:</strong><br>
+                        <code>&lt;servlet&gt;&lt;servlet-name&gt;Hello&lt;/servlet-name&gt;&lt;servlet-class&gt;HelloServlet&lt;/servlet-class&gt;&lt;/servlet&gt;<br>
+                        &lt;servlet-mapping&gt;&lt;servlet-name&gt;Hello&lt;/servlet-name&gt;&lt;url-pattern&gt;/hello&lt;/url-pattern&gt;&lt;/servlet-mapping&gt;</code>
+                    </div>
+                </div>
+                <div class="playground">
+                    <h4>🎮 Tomcat Servlet Simulator</h4>
+                    <div class="tomcat-sim">
+                        <div class="server-status" id="tomcatStatus">
+                            🔴 Tomcat is STOPPED
+                        </div>
+                        <div style="margin: 0.6rem 0; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <button id="startTomcatBtn">▶️ Start Tomcat</button>
+                            <button id="stopTomcatBtn" class="secondary-btn">⏹️ Stop Tomcat (destroy)</button>
+                            <button id="deployServletBtn">📦 Deploy & Visit /hello</button>
+                        </div>
+                        <div id="servletOutput" class="server-status" style="background:#2c3e2a; margin-top:0.5rem;">
+                            💡 Servlet output will appear here after deployment.
+                        </div>
+                        <div class="terminal-line" style="margin-top:0.5rem;">
+                            🔗 URL: <span id="urlDisplay">http://localhost:8080/hello</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Viva & Practical Exam Questions -->
+    <div class="viva-section">
+        <h2>🎤 Viva & Practical Exam Questions (MCSL-222)</h2>
+        <div class="viva-item">
+            <div class="viva-question">Q1. Name any four software tools that can be used to draw UML diagrams in this lab.</div>
+            <div class="viva-answer"><strong>Answer:</strong> According to the IGNOU lab manual, we can use StarUML, ArgoUML, MS-Visio, and IBM Rational Rose. StarUML is preferred for its simplicity.</div>
+        </div>
+        <div class="viva-item">
+            <div class="viva-question">Q2. In StarUML, how do you visually distinguish an Interface from a regular Class?</div>
+            <div class="viva-answer"><strong>Answer:</strong> An interface is shown as a class rectangle with the stereotype <code>&lt;&lt;interface&gt;&gt;</code> above the name. Alternatively, some tools use a small circle (lollipop notation) for provided interfaces.</div>
+        </div>
+        <div class="viva-item">
+            <div class="viva-question">Q3. Which specific folder inside the Apache Tomcat directory is used to place our web applications?</div>
+            <div class="viva-answer"><strong>Answer:</strong> The <code>webapps</code> folder. Any application folder placed inside <code>webapps</code> is automatically deployed by Tomcat.</div>
+        </div>
+        <div class="viva-item">
+            <div class="viva-question">Q4. What is the role of web.xml in a Java Web Application?</div>
+            <div class="viva-answer"><strong>Answer:</strong> <code>web.xml</code> is the Deployment Descriptor. It configures servlet mappings, URL patterns, session timeouts, and security constraints, telling the Web Container how to run the application.</div>
+        </div>
+        <div class="viva-item">
+            <div class="viva-question">Q5. How do you start and shut down the Apache Tomcat server using the command line?</div>
+            <div class="viva-answer"><strong>Answer:</strong> Navigate to the <code>bin</code> directory. Execute <code>startup.bat</code> (Windows) or <code>./startup.sh</code> (Linux/Mac) to start. Execute <code>shutdown.bat</code> or <code>./shutdown.sh</code> to shut down gracefully (invoking servlet destroy()).</div>
+        </div>
+    </div>
+
+    <div class="congrats">
+        🎉 <strong>Congratulations! Week 1 Complete!</strong> 🎉<br>
+        You've mastered Networks (MCS-218), OOAD (MCS-219), Web Tech (MCS-220), and Lab tools (MCSL-222). Ready for Week 2: Data Warehousing & Data Mining (MCS-221) — Day 8 starts tomorrow!
+    </div>
+    <footer>📘 MCA Sem-2 Master Mentorship — Day 7: Lab Session. StarUML + Tomcat hands-on simulation. Keep practicing these tools for lab exams.</footer>
+</div>
+
+<script>
+    // ----- UML Builder Simulation -----
+    let extraClasses = [];
+    let showLibraryAgg = false;
+
+    const umlCanvas = document.getElementById('umlCanvas');
+    const umlLog = document.getElementById('umlLog');
+
+    function renderUML() {
+        let html = `<div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.5rem;">
+            <div class="class-preview">🏛️ University<br>+ name: String</div>
+            <span class="relation-preview">◇—</span>
+            <div class="class-preview">📚 School<br>+ schoolName: String</div>
+            <span class="relation-preview">◇—</span>
+            <div class="class-preview">📖 Department<br>+ deptCode: String</div>`;
+        if (extraClasses.includes('Book')) {
+            if (showLibraryAgg) {
+                html += `<span class="relation-preview">◇—</span><div class="class-preview">📖 Book<br>+ title: String<br>+ ISBN: String</div>`;
+            } else {
+                html += `<div style="margin-left:0.5rem;"><div class="class-preview">📖 Book<br>+ title: String</div></div>`;
+            }
+        }
+        if (showLibraryAgg && extraClasses.includes('Book')) {
+            // add Library aggregation to Books
+            html = `<div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.5rem;">
+                <div class="class-preview">🏛️ Library<br>+ libName: String</div>
+                <span class="relation-preview">◇—</span>
+                <div class="class-preview">📖 Book<br>+ title: String</div>
+            </div><div style="margin-top:0.5rem;">${html}</div>`;
+        }
+        html += `</div><div style="font-size:0.65rem; margin-top:0.5rem; text-align:center;">🔹 Hollow diamond = Aggregation (whole-part)`;
+        if (showLibraryAgg) html += `<br>✅ Library → Books aggregation added.`;
+        html += `</div>`;
+        umlCanvas.innerHTML = html;
+    }
+
+    document.getElementById('addBookClassBtn')?.addEventListener('click', () => {
+        if (!extraClasses.includes('Book')) {
+            extraClasses.push('Book');
+            umlLog.innerHTML = '📘 Book class added to diagram. Use "Add Aggregation" to connect Library → Books.';
+            renderUML();
+        } else {
+            umlLog.innerHTML = '⚠️ Book class already exists.';
+        }
+    });
+
+    document.getElementById('addLibraryAggBtn')?.addEventListener('click', () => {
+        if (!extraClasses.includes('Book')) {
+            umlLog.innerHTML = '❌ Add Book class first, then create Library → Books aggregation.';
+            return;
+        }
+        showLibraryAgg = true;
+        umlLog.innerHTML = '🏛️ Aggregation added: Library (whole) ◇— Books (part). This matches the "whole-part" relationship.';
+        renderUML();
+    });
+
+    document.getElementById('resetUmlBtn')?.addEventListener('click', () => {
+        extraClasses = [];
+        showLibraryAgg = false;
+        umlLog.innerHTML = '🔄 UML diagram reset to base classes (University, School, Department).';
+        renderUML();
+    });
+    renderUML();
+
+    // ----- Tomcat Servlet Simulator (Interactive) -----
+    let tomcatRunning = false;
+    let servletDeployed = false;
+    const tomcatStatusDiv = document.getElementById('tomcatStatus');
+    const servletOutputDiv = document.getElementById('servletOutput');
+    const urlSpan = document.getElementById('urlDisplay');
+
+    function updateTomcatUI() {
+        if (tomcatRunning) {
+            tomcatStatusDiv.innerHTML = '🟢 Tomcat is RUNNING on port 8080<br>✅ Web Container active, ready for servlets.';
+            tomcatStatusDiv.style.background = '#1e4620';
+        } else {
+            tomcatStatusDiv.innerHTML = '🔴 Tomcat is STOPPED<br>⚙️ Use "Start Tomcat" to launch server.';
+            tomcatStatusDiv.style.background = '#2c3e2a';
+            servletDeployed = false;
+            servletOutputDiv.innerHTML = '💡 Servlet output will appear after server start and deployment.';
+        }
+    }
+
+    document.getElementById('startTomcatBtn')?.addEventListener('click', () => {
+        tomcatRunning = true;
+        updateTomcatUI();
+        servletOutputDiv.innerHTML = '✅ Tomcat started. <br>⏳ Click "Deploy & Visit /hello" to simulate servlet execution.';
+    });
+
+    document.getElementById('stopTomcatBtn')?.addEventListener('click', () => {
+        tomcatRunning = false;
+        servletDeployed = false;
+        updateTomcatUI();
+        servletOutputDiv.innerHTML = '🛑 Tomcat stopped. destroy() method would be called on all servlets (cleanup).';
+    });
+
+    document.getElementById('deployServletBtn')?.addEventListener('click', () => {
+        if (!tomcatRunning) {
+            servletOutputDiv.innerHTML = '❌ Cannot deploy: Tomcat is not running. Start the server first.';
+            return;
+        }
+        servletDeployed = true;
+        // simulate servlet lifecycle: init() first time, then service()
+        let output = '';
+        if (!window.servletInitialized) {
+            output += '🔧 Servlet init() called (once). DB connection prepared.<br>';
+            window.servletInitialized = true;
+        }
+        output += '📨 Servlet service() → doGet() invoked.<br>';
+        output += '🌐 <strong>Hello from HelloServlet!</strong> Welcome to your first deployed servlet.<br>';
+        output += '🍪 Session cookie created. Request processed by Web Container.<br>';
+        servletOutputDiv.innerHTML = output;
+        urlSpan.innerHTML = '<a href="#" style="color:#b3ffcf;">http://localhost:8080/hello (simulated)</a>';
+    });
+
+    updateTomcatUI();
+
+    // Additional elaboration notes
+    const tomcatPlayground = document.querySelector('.tomcat-sim')?.parentElement;
+    if (tomcatPlayground) {
+        const tomcatNote = document.createElement('div');
+        tomcatNote.className = 'example-block';
+        tomcatNote.style.marginTop = '0.8rem';
+        tomcatNote.style.fontSize = '0.7rem';
+        tomcatNote.innerHTML = '📌 <strong>Lab Tip:</strong> In actual lab, place your compiled .class in <code>webapps/ROOT/WEB-INF/classes/</code>. Edit <code>web.xml</code> for servlet mapping. Restart Tomcat triggers <code>init()</code>, requests call <code>service()</code>.';
+        tomcatPlayground.appendChild(tomcatNote);
+    }
+
+    const umlPlayground = document.querySelector('.uml-builder')?.parentElement;
+    if (umlPlayground) {
+        const umlNote = document.createElement('div');
+        umlNote.className = 'example-block';
+        umlNote.style.marginTop = '0.6rem';
+        umlNote.style.fontSize = '0.7rem';
+        umlNote.innerHTML = '🎨 <strong>StarUML Shortcut:</strong> Press "C" for class, "A" for aggregation line. Right-click class → Add Attribute/Operation. Use "Stereotype" for interfaces.';
+        umlPlayground.appendChild(umlNote);
+    }
+</script>
+</body>
+</html>
