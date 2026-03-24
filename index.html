@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resident Engineer Portal - IRICEN</title>
+    <title>Dashboard - IRICEN Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -17,255 +17,89 @@
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col">
 
-    <!-- Header / Hero Section -->
-    <header class="bg-pattern text-white py-12 px-6 shadow-lg border-b-4 border-blue-500">
-        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+    <header class="bg-pattern text-white py-10 px-6 shadow-lg border-b-4 border-blue-600">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
                 <div class="flex items-center gap-3 mb-2">
-                    <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">IRICEN IT Support</span>
+                    <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Control Center</span>
                 </div>
-                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Resident Engineer Portal</h1>
-                <p class="text-slate-300 mt-2 text-lg max-w-xl">Your interactive training environment. Master the hardware, network, and systems you will support daily.</p>
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Personal Dashboard</h1>
+                <p class="text-slate-400 mt-2 text-lg max-w-xl">Centralized access to Resident Engineer resources and MCA academic materials.</p>
             </div>
             <div class="hidden md:block">
-                <svg class="w-24 h-24 text-blue-500 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <div class="p-4 bg-slate-800/50 rounded-2xl border border-slate-700">
+                    <div class="text-xs text-slate-500 uppercase font-bold mb-1">System Status</div>
+                    <div class="flex items-center gap-2 text-green-400">
+                        <span class="relative flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                        </span>
+                        <span class="font-mono text-sm">All Systems Operational</span>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Grid -->
-    <main class="flex-1 max-w-5xl mx-auto w-full p-6 py-10">
+    <main class="flex-1 max-w-6xl mx-auto w-full p-6 py-10">
         
-        <div class="mb-8 border-b border-slate-200 pb-2">
-            <h2 class="text-xl font-bold text-slate-800">Training Modules</h2>
-            <p class="text-slate-500 text-sm">Select a module below to launch the simulator. Complete them in order.</p>
+        <div class="mb-6 flex items-center gap-4">
+            <h2 class="text-xl font-bold text-slate-800 whitespace-nowrap">Training & Operations</h2>
+            <div class="h-[1px] w-full bg-slate-200"></div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            <!-- LEVEL 1: Field Guide -->
-            <a href="resident_engineer_guide.html" class="group bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition-all duration-200 flex flex-col relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-slate-400 group-hover:bg-blue-500 transition-colors"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            
+            <a href="RE01.html" class="group bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition-all duration-200 flex flex-col relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
                 <div class="flex items-start justify-between mb-4">
-                    <div class="bg-slate-100 p-3 rounded-lg text-slate-600 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    <div class="bg-blue-50 p-3 rounded-lg text-blue-600 group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04m18.618 0c-.051 3.17-1.154 6.315-3.145 8.944a11.983 11.983 0 01-5.618 4.016m-8.618-4.016A11.955 11.955 0 012.382 6.44m0 0A11.954 11.954 0 000 12c0 5.42 3.587 10.14 8.618 11.662m4.764-1.338L12 21.056"></path></svg>
                     </div>
-                    <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded">Level 1</span>
+                    <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded uppercase">Engineering</span>
                 </div>
-                <h3 class="text-lg font-bold text-slate-800 mb-1">Hardware & Network Basics</h3>
-                <p class="text-sm text-slate-600 mb-4 flex-1">A visual field guide to network racks, patch panels, switches, RJ45 cables, and display ports.</p>
-                <div class="text-sm font-semibold text-blue-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                    Launch Guide <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <h3 class="text-lg font-bold text-slate-800 mb-1">Resident Engineer Guide</h3>
+                <p class="text-sm text-slate-500 mb-4 flex-1">Hardware diagnostics, network troubleshooting, and field maintenance procedures.</p>
+                <div class="text-sm font-semibold text-blue-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                    Enter Portal →
                 </div>
             </a>
 
-            <!-- LEVEL 2: Troubleshooting -->
-            <a href="engineer_simulator_level_2.html" class="group bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition-all duration-200 flex flex-col relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-slate-400 group-hover:bg-blue-500 transition-colors"></div>
-                <div class="flex items-start justify-between mb-4">
-                    <div class="bg-slate-100 p-3 rounded-lg text-slate-600 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    </div>
-                    <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded">Level 2</span>
+            <a href="#" class="group bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:border-blue-300 transition-colors">
+                <div class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-400 mb-3 group-hover:bg-blue-100 group-hover:text-blue-500 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 </div>
-                <h3 class="text-lg font-bold text-slate-800 mb-1">System Troubleshooting</h3>
-                <p class="text-sm text-slate-600 mb-4 flex-1">Interactive simulators for restarting frozen Print Spoolers and fixing APIPA (169.254.x.x) IP errors.</p>
-                <div class="text-sm font-semibold text-blue-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                    Launch Simulator <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </div>
+                <span class="text-slate-500 font-medium italic">New Training Module coming soon...</span>
             </a>
 
-            <!-- LEVEL 3: Active Directory -->
-            <a href="ad_simulator.html" class="group bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition-all duration-200 flex flex-col relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-slate-400 group-hover:bg-blue-500 transition-colors"></div>
-                <div class="flex items-start justify-between mb-4">
-                    <div class="bg-slate-100 p-3 rounded-lg text-slate-600 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    </div>
-                    <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded">Level 3</span>
-                </div>
-                <h3 class="text-lg font-bold text-slate-800 mb-1">Active Directory Admin</h3>
-                <p class="text-sm text-slate-600 mb-4 flex-1">Practice finding users, unlocking accounts, and resetting passwords in a simulated Windows Server ADUC environment.</p>
-                <div class="text-sm font-semibold text-blue-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                    Launch Simulator <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </div>
-            </a>
+        </div>
 
-            <!-- LEVEL 4: Outlook Configuration -->
-            <a href="outlook_simulator.html" class="group bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:border-blue-400 transition-all duration-200 flex flex-col relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-slate-400 group-hover:bg-blue-500 transition-colors"></div>
-                <div class="flex items-start justify-between mb-4">
-                    <div class="bg-slate-100 p-3 rounded-lg text-slate-600 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded">Level 4</span>
-                </div>
-                <h3 class="text-lg font-bold text-slate-800 mb-1">Outlook Mail Config</h3>
-                <p class="text-sm text-slate-600 mb-4 flex-1">Manually configure IMAP and SMTP ports for official email accounts using correct server encryption settings.</p>
-                <div class="text-sm font-semibold text-blue-600 flex items-center gap-1 group-hover:gap-2 transition-all">
-                    Launch Simulator <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </div>
-            </a>
+        <div class="mb-6 flex items-center gap-4">
+            <h2 class="text-xl font-bold text-slate-800 whitespace-nowrap">Academic Resources</h2>
+            <div class="h-[1px] w-full bg-slate-200"></div>
+        </div>
 
-            <!-- LEVEL 5: Router Configuration -->
-<a href="router_config_level5.html" class="group bg-white rounded-xl border-2 border-purple-200 p-6 shadow-lg hover:shadow-2xl hover:border-purple-500 transition-all duration-200 flex flex-col relative overflow-hidden">
-    <div class="absolute top-0 left-0 w-1 h-full bg-purple-600 group-hover:bg-purple-700 transition-colors"></div>
-    
-    <!-- Premium Badge -->
-    <div class="absolute top-0 right-0 bg-gradient-to-l from-purple-600 to-purple-400 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg shadow-sm">
-        ⚡ EXPERT LEVEL
-    </div>
-    
-    <div class="flex items-start justify-between mb-4">
-        <div class="bg-purple-100 p-3 rounded-lg text-purple-600 group-hover:bg-purple-200 group-hover:text-purple-700 transition-colors">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.906 14.142 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path></svg>
-        </div>
-        <span class="text-xs font-bold text-white bg-purple-600 px-3 py-1.5 rounded-full shadow-sm">Level 5 • Expert</span>
-    </div>
-    
-    <h3 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-        Router Security Configuration
-        <span class="bg-red-100 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">Live</span>
-    </h3>
-    
-    <p class="text-sm text-slate-600 mb-4 flex-1 leading-relaxed">Configure enterprise-grade wireless security. Practice setting up WPA2-PSK encryption, SSID management, and router admin controls in a realistic simulator.</p>
-    
-    <!-- Challenge Preview -->
-    <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg p-3 mb-4 border border-purple-200">
-        <div class="flex items-center gap-2 mb-2">
-            <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-            <span class="text-xs font-bold text-purple-800">Today's Challenge:</span>
-        </div>
-        <div class="grid grid-cols-2 gap-2 text-xs">
-            <div class="bg-white/60 p-2 rounded">
-                <span class="text-slate-500">SSID:</span>
-                <span class="font-mono font-bold text-purple-700 block">IRICEN_Classroom3</span>
-            </div>
-            <div class="bg-white/60 p-2 rounded">
-                <span class="text-slate-500">Security:</span>
-                <span class="font-mono font-bold text-purple-700 block">WPA2-PSK</span>
-            </div>
-            <div class="bg-white/60 p-2 rounded col-span-2">
-                <span class="text-slate-500">Password:</span>
-                <span class="font-mono font-bold text-purple-700 block">Pune@2026</span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Features List -->
-    <div class="flex flex-wrap gap-2 mb-4">
-        <span class="bg-slate-100 text-slate-600 text-[10px] font-medium px-2 py-1 rounded-full">🔐 Router Login</span>
-        <span class="bg-slate-100 text-slate-600 text-[10px] font-medium px-2 py-1 rounded-full">📡 Wireless Setup</span>
-        <span class="bg-slate-100 text-slate-600 text-[10px] font-medium px-2 py-1 rounded-full">⚙️ Security Config</span>
-        <span class="bg-slate-100 text-slate-600 text-[10px] font-medium px-2 py-1 rounded-full">🔄 Reboot Simulation</span>
-    </div>
-    
-    <div class="text-sm font-semibold text-purple-600 flex items-center gap-1 group-hover:gap-2 transition-all border-t border-purple-100 pt-4">
-        Launch Expert Router Lab <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-    </div>
-</a>
-<!-- LEVEL 6: IT Helpdesk Simulator -->
-<a href="helpdesk_level6.html" class="group bg-white rounded-xl border-2 border-amber-200 p-6 shadow-lg hover:shadow-2xl hover:border-amber-500 transition-all duration-200 flex flex-col relative overflow-hidden">
-    <div class="absolute top-0 left-0 w-1 h-full bg-amber-600 group-hover:bg-amber-700 transition-colors"></div>
-    
-    <!-- Expert Badge -->
-    <div class="absolute top-0 right-0 bg-gradient-to-l from-amber-600 to-amber-400 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg shadow-sm">
-        🎯 MASTER LEVEL
-    </div>
-    
-    <div class="flex items-start justify-between mb-4">
-        <div class="bg-amber-100 p-3 rounded-lg text-amber-600 group-hover:bg-amber-200 group-hover:text-amber-700 transition-colors">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-        </div>
-        <span class="text-xs font-bold text-white bg-amber-600 px-3 py-1.5 rounded-full shadow-sm">Level 6 • Master</span>
-    </div>
-    
-    <h3 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2">
-        IT Helpdesk Management
-        <span class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1">
-            <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-            Active
-        </span>
-    </h3>
-    
-    <p class="text-sm text-slate-600 mb-4 flex-1 leading-relaxed">Realistic service desk simulation with ticket management, prioritization, and resolution workflows. Practice handling urgent IT requests under SLA pressure.</p>
-    
-    <!-- Live Ticket Preview -->
-    <div class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg p-3 mb-4 border border-amber-200">
-        <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-1">
-                <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
-                <span class="text-xs font-bold text-amber-800">URGENT TICKET #1045</span>
-            </div>
-            <span class="text-[10px] font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">SLA: 1h 15m</span>
-        </div>
-        <div class="space-y-2">
-            <div class="flex items-center justify-between text-xs">
-                <span class="text-slate-600">Requester:</span>
-                <span class="font-medium text-slate-800">Suresh Patil (Admin)</span>
-            </div>
-            <div class="flex items-center justify-between text-xs">
-                <span class="text-slate-600">Issue:</span>
-                <span class="font-medium text-amber-700">Class 3 Wi-Fi AP Configuration</span>
-            </div>
-            <div class="flex items-center gap-2 mt-2">
-                <span class="bg-red-100 text-red-700 text-[10px] font-medium px-2 py-0.5 rounded-full">High Priority</span>
-                <span class="bg-amber-100 text-amber-700 text-[10px] font-medium px-2 py-0.5 rounded-full">Unassigned</span>
-                <span class="bg-slate-100 text-slate-600 text-[10px] font-medium px-2 py-0.5 rounded-full">New</span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Features Grid -->
-    <div class="grid grid-cols-2 gap-2 mb-4">
-        <div class="flex items-center gap-1.5">
-            <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-            <span class="text-xs text-slate-600">Ticket Assignment</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-            <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span class="text-xs text-slate-600">SLA Tracking</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-            <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            <span class="text-xs text-slate-600">Resolution Workflow</span>
-        </div>
-        <div class="flex items-center gap-1.5">
-            <svg class="w-3.5 h-3.5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-            <span class="text-xs text-slate-600">Activity Logging</span>
-        </div>
-    </div>
-
-    <!-- Performance Metrics Preview -->
-    <div class="flex items-center justify-between text-xs border-t border-amber-100 pt-3 mb-3">
-        <div class="flex items-center gap-2">
-            <span class="text-slate-500">Tickets:</span>
-            <span class="font-bold text-slate-800">3 Unassigned</span>
-        </div>
-        <div class="flex items-center gap-2">
-            <span class="text-slate-500">Resolved:</span>
-            <span class="font-bold text-green-600">12</span>
-        </div>
-        <div class="flex items-center gap-2">
-            <span class="text-slate-500">SLA:</span>
-            <span class="font-bold text-red-600">1 Critical</span>
-        </div>
-    </div>
-    
-    <div class="text-sm font-semibold text-amber-600 flex items-center gap-1 group-hover:gap-2 transition-all border-t border-amber-100 pt-4">
-        Launch Master Helpdesk <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-    </div>
-</a>
-           
-
-        </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 py-6 text-center text-slate-500 text-xs">
-        <a href="page2.html" class="text-2xl md:text-3xl font-extrabold tracking-tight">Next</a>
-        <br>
-        <a href="MCA2Sem.html" class="text-1xl md:text-2xl font-extrabold tracking-tight">MCA Sem 2</a>
+    <footer class="bg-slate-900 mt-12 py-12 px-6">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left">
+                <div class="text-blue-500 font-bold text-xl mb-1">Personal Use Only</div>
+                <p class="text-slate-500 text-sm">Organized environment for learning and growth.</p>
+            </div>
+            
+            <div class="flex gap-4">
+                <a href="page2.html" class="px-6 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors font-semibold">
+                    View Logs
+                </a>
+                <a href="#" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-colors font-semibold shadow-lg shadow-blue-900/20">
+                    Contact Admin
+                </a>
+            </div>
+        </div>
+        <div class="max-w-6xl mx-auto border-t border-slate-800 mt-8 pt-6 text-center text-slate-600 text-[10px] uppercase tracking-widest">
+            &copy;
+        </div>
     </footer>
 
 </body>
