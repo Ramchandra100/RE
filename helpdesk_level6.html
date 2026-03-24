@@ -1,337 +1,516 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Helpdesk Simulator - Level 6</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-        
-        .status-badge { padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
-        .status-new { background-color: #fee2e2; color: #991b1b; }
-        .status-progress { background-color: #fef08a; color: #854d0e; }
-        .status-resolved { background-color: #dcfce3; color: #166534; }
-        
-        .priority-high { color: #dc2626; font-weight: bold; }
-        .priority-med { color: #d97706; font-weight: bold; }
-        .priority-low { color: #2563eb; font-weight: bold; }
-        
-        .ticket-row { transition: all 0.2s; cursor: pointer; }
-        .ticket-row:hover { background-color: #f8fafc; transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Level 6: Helpdesk & Ticketing (ITSM) | Interactive Textbook</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f5f7fb;
+      font-family: 'Inter', sans-serif;
+      color: #0a2540;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    .textbook-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #1e4a6b 0%, #0f3b54 100%);
+      border-radius: 2rem;
+      padding: 2rem 2rem 2rem 2.5rem;
+      margin-bottom: 2.5rem;
+      color: white;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.25);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "🎫📋";
+      font-size: 9rem;
+      opacity: 0.08;
+      position: absolute;
+      bottom: -1rem;
+      right: 0.5rem;
+      pointer-events: none;
+    }
+    .hero-badge {
+      background: #2c7da0;
+      display: inline-block;
+      padding: 0.25rem 1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: 2.7rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 70%;
+    }
+    @media (max-width: 700px) {
+      .hero p { max-width: 100%; }
+      .hero h1 { font-size: 2rem; }
+      .hero { padding: 1.5rem; }
+    }
+
+    /* Cards */
+    .section-card {
+      background: white;
+      border-radius: 1.75rem;
+      padding: 1.8rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.05);
+      border: 1px solid #e2e8f0;
+      transition: box-shadow 0.2s;
+    }
+    .section-card:hover {
+      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+    }
+    .section-title {
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-left: 5px solid #2c7da0;
+      padding-left: 1rem;
+    }
+    .section-title i {
+      color: #2c7da0;
+      font-size: 1.6rem;
+    }
+
+    /* Golden Rule Card */
+    .golden-rule {
+      background: linear-gradient(135deg, #fff8e7, #fff3df);
+      border-left: 8px solid #f4b942;
+      border-radius: 1.2rem;
+      padding: 1.2rem 1.8rem;
+      margin: 1rem 0;
+    }
+    .lifecycle-steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.8rem;
+      margin: 1.5rem 0;
+    }
+    .lifecycle-step {
+      flex: 1;
+      background: #f8fafc;
+      border-radius: 1rem;
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid #e2edf2;
+      transition: all 0.2s;
+    }
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .sla-card {
+      background: #fef2e8;
+      border-radius: 1rem;
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 5px solid #e67e22;
+    }
+    .note-comparison {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin: 1rem 0;
+    }
+    .bad-note {
+      background: #ffeae9;
+      border-left: 4px solid #e74c3c;
+      padding: 0.8rem;
+      border-radius: 0.8rem;
+      flex: 1;
+    }
+    .good-note {
+      background: #e8f5e9;
+      border-left: 4px solid #2ecc71;
+      padding: 0.8rem;
+      border-radius: 0.8rem;
+      flex: 2;
+    }
+    .two-columns {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    .info-card {
+      flex: 1;
+      background: #f9fbfe;
+      border-radius: 1rem;
+      padding: 1rem;
+      border: 1px solid #e0e8f0;
+    }
+    .btn-primary {
+      background: #2c7da0;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-primary:hover {
+      background: #1f5e7e;
+      transform: scale(0.98);
+    }
+    .quiz-area {
+      background: linear-gradient(120deg, #f8faff, #f0f4fc);
+      border-radius: 1.5rem;
+      padding: 1.8rem;
+    }
+    .quiz-question {
+      background: white;
+      border-radius: 1rem;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      cursor: pointer;
+      border: 1px solid #cfdfe8;
+      transition: all 0.2s;
+    }
+    .quiz-question:hover {
+      border-color: #2c7da0;
+      background: #ffffff;
+    }
+    .quiz-q-text {
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .quiz-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out;
+      background: #f5f9fe;
+      border-radius: 0.8rem;
+      margin-top: 0.5rem;
+      padding: 0 0.8rem;
+    }
+    .quiz-answer.show {
+      max-height: 260px;
+      padding: 0.8rem;
+      margin-top: 0.8rem;
+    }
+    .yt-card {
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 0.7rem 1.2rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #1e4663;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid #cbdde6;
+      margin-right: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .yt-card i {
+      font-size: 1.5rem;
+      color: #ff0000;
+    }
+    .yt-card:hover {
+      background: #ffffff;
+      border-color: #2c7da0;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #4b6a7c;
+      font-size: 0.85rem;
+    }
+    hr {
+      margin: 1rem 0;
+      border-color: #d4e2ec;
+    }
+    code, .cmd {
+      background: #eef2fa;
+      padding: 0.2rem 0.5rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+    .ticket-status {
+      display: inline-block;
+      padding: 0.2rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+    .status-new { background: #e3f2fd; color: #0b5e7e; }
+    .status-progress { background: #fff3e0; color: #e67e22; }
+    .status-resolved { background: #e8f5e9; color: #2e7d32; }
+    .status-closed { background: #eceff1; color: #546e7a; }
+    @media (max-width: 680px) {
+      .textbook-container { padding: 1rem; }
+      .section-card { padding: 1.2rem; }
+    }
+  </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden text-sm">
+<body>
+<div class="textbook-container">
+  <div class="hero animate__animated animate__fadeInUp">
+    <div class="hero-badge"><i class="fas fa-ticket-alt"></i> Level 6 · ITSM Essentials</div>
+    <h1>Helpdesk & Ticketing (ITSM)</h1>
+    <p>Master the ticket lifecycle, SLA deadlines, and professional resolution notes — prove your value.</p>
+  </div>
 
-    <!-- Navbar -->
-    <nav class="bg-slate-900 text-white p-3 flex justify-between items-center shadow-md z-10 shrink-0">
-        <div class="flex items-center gap-3">
-            <div class="bg-blue-600 p-1.5 rounded-lg">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-            </div>
-            <span class="font-bold text-lg tracking-wide">ServiceDesk Plus</span>
-        </div>
-        <div class="flex items-center gap-4">
-            <div class="hidden md:flex items-center gap-2 text-slate-300">
-                <span class="w-2 h-2 rounded-full bg-green-400"></span>
-                System Online
-            </div>
-            <div class="border-l border-slate-700 pl-4 flex items-center gap-2">
-                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center font-bold">RE</div>
-                <span class="font-medium hidden sm:block">Resident Engineer</span>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Workspace -->
-    <div class="flex-1 flex overflow-hidden">
-        
-        <!-- Sidebar -->
-        <aside class="w-56 bg-white border-r border-slate-200 flex flex-col shrink-0">
-            <div class="p-4 border-b border-slate-100">
-                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded shadow-sm transition flex items-center justify-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    New Ticket
-                </button>
-            </div>
-            <div class="py-2 flex-1 overflow-y-auto">
-                <div class="px-4 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Views</div>
-                <div class="px-4 py-2 bg-blue-50 text-blue-700 border-r-4 border-blue-600 font-medium cursor-pointer flex justify-between items-center">
-                    <span>Unassigned Tickets</span>
-                    <span class="bg-blue-200 text-blue-800 text-xs px-2 py-0.5 rounded-full" id="count-unassigned">3</span>
-                </div>
-                <div class="px-4 py-2 text-slate-600 hover:bg-slate-50 cursor-pointer flex justify-between items-center transition">
-                    <span>My Open Tickets</span>
-                    <span class="bg-slate-200 text-slate-600 text-xs px-2 py-0.5 rounded-full" id="count-mine">0</span>
-                </div>
-                <div class="px-4 py-2 text-slate-600 hover:bg-slate-50 cursor-pointer flex justify-between items-center transition">
-                    <span>Resolved</span>
-                    <span class="bg-slate-200 text-slate-600 text-xs px-2 py-0.5 rounded-full" id="count-resolved">12</span>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Ticket List View -->
-        <main class="flex-1 bg-slate-50 flex flex-col relative">
-            
-            <div class="p-4 md:p-6 border-b border-slate-200 bg-white shrink-0 flex justify-between items-end">
-                <div>
-                    <h1 class="text-2xl font-bold text-slate-800">Unassigned Tickets</h1>
-                    <p class="text-slate-500 text-sm mt-1">Tickets waiting to be picked up by an engineer.</p>
-                </div>
-                <div class="hidden sm:flex gap-2">
-                    <button class="px-3 py-1 border border-slate-300 rounded text-slate-600 hover:bg-slate-50 flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg> Filter
-                    </button>
-                </div>
-            </div>
-
-            <!-- List Table -->
-            <div class="flex-1 overflow-auto p-4 md:p-6">
-                <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden min-w-[600px]">
-                    
-                    <div class="grid grid-cols-12 gap-4 p-3 bg-slate-100 border-b border-slate-200 font-bold text-slate-600 text-xs tracking-wider uppercase">
-                        <div class="col-span-1 text-center">ID</div>
-                        <div class="col-span-4">Subject</div>
-                        <div class="col-span-2">Requester</div>
-                        <div class="col-span-2">Priority</div>
-                        <div class="col-span-2">Status</div>
-                        <div class="col-span-1">SLA</div>
-                    </div>
-
-                    <div id="ticket-container">
-                        <!-- TICKET 1042 -->
-                        <div class="grid grid-cols-12 gap-4 p-3 border-b border-slate-100 ticket-row items-center" onclick="openTicket('1042')">
-                            <div class="col-span-1 text-center font-mono text-slate-500">#1042</div>
-                            <div class="col-span-4 font-medium text-slate-800 truncate">Projector color is pink/yellow in Room 2</div>
-                            <div class="col-span-2 text-slate-600">Amit Verma</div>
-                            <div class="col-span-2 priority-low">Low</div>
-                            <div class="col-span-2"><span class="status-badge status-new">New</span></div>
-                            <div class="col-span-1 text-slate-500 text-xs">2d</div>
-                        </div>
-
-                        <!-- TICKET 1045 (THE TARGET) -->
-                        <div id="row-1045" class="grid grid-cols-12 gap-4 p-3 border-b border-slate-100 ticket-row items-center" onclick="openTicket('1045')">
-                            <div class="col-span-1 text-center font-mono text-slate-500">#1045</div>
-                            <div class="col-span-4 font-medium text-slate-800 truncate">Class 3 needs Wi-Fi AP configured immediately</div>
-                            <div class="col-span-2 text-slate-600">Suresh Patil (Admin)</div>
-                            <div class="col-span-2 priority-high">High</div>
-                            <div class="col-span-2"><span id="badge-1045" class="status-badge status-new">New</span></div>
-                            <div class="col-span-1 text-red-500 font-bold text-xs">1h 15m</div>
-                        </div>
-
-                        <!-- TICKET 1048 -->
-                        <div class="grid grid-cols-12 gap-4 p-3 border-b border-slate-100 ticket-row items-center" onclick="openTicket('1048')">
-                            <div class="col-span-1 text-center font-mono text-slate-500">#1048</div>
-                            <div class="col-span-4 font-medium text-slate-800 truncate">Printer showing "Spooler Subsystem App has stopped"</div>
-                            <div class="col-span-2 text-slate-600">Anita Desai</div>
-                            <div class="col-span-2 priority-med">Medium</div>
-                            <div class="col-span-2"><span class="status-badge status-new">New</span></div>
-                            <div class="col-span-1 text-slate-500 text-xs">4h</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TICKET DETAILS MODAL (Slide in from right) -->
-            <div id="ticket-modal" class="absolute inset-y-0 right-0 w-full md:w-2/3 lg:w-1/2 bg-white shadow-[-10px_0_20px_rgba(0,0,0,0.1)] transform translate-x-full transition-transform duration-300 flex flex-col border-l border-slate-200 z-20">
-                
-                <!-- Modal Header -->
-                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-start">
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span id="modal-id" class="font-mono text-slate-500 text-sm">#1045</span>
-                            <span id="modal-badge" class="status-badge status-new">New</span>
-                        </div>
-                        <h2 id="modal-title" class="text-xl font-bold text-slate-800">Class 3 needs Wi-Fi AP configured immediately</h2>
-                    </div>
-                    <button onclick="closeTicket()" class="text-slate-400 hover:text-slate-700 bg-white rounded-full p-1 border border-slate-200 shadow-sm">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-
-                <!-- Action Bar -->
-                <div class="px-4 py-2 bg-slate-100 border-b border-slate-200 flex gap-2" id="action-bar">
-                    <button id="btn-assign" onclick="assignToMe()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded shadow-sm flex items-center gap-2 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
-                        Assign to Me
-                    </button>
-                    <button id="btn-resolve" onclick="openResolveBox()" class="hidden px-4 py-1.5 bg-green-600 hover:bg-green-700 text-white font-medium rounded shadow-sm flex items-center gap-2 transition">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Resolve Ticket
-                    </button>
-                </div>
-
-                <!-- Modal Body -->
-                <div class="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
-                    
-                    <!-- Ticket Info Card -->
-                    <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
-                        <div class="grid grid-cols-2 gap-4 text-sm mb-4 border-b border-slate-100 pb-4">
-                            <div><span class="text-slate-500 block text-xs">Requester:</span> <span class="font-medium text-slate-800">Suresh Patil</span></div>
-                            <div><span class="text-slate-500 block text-xs">Priority:</span> <span class="priority-high">High</span></div>
-                            <div><span class="text-slate-500 block text-xs">Category:</span> <span>Network / Wi-Fi</span></div>
-                            <div><span class="text-slate-500 block text-xs">Created:</span> <span>Today, 08:30 AM</span></div>
-                        </div>
-                        <div>
-                            <span class="text-slate-500 block text-xs mb-2">Description:</span>
-                            <p class="text-slate-700 whitespace-pre-wrap font-serif" id="modal-desc">
-Hi IT,
-The new training session starts in Class 3 at 11:00 AM. 
-We need the new Access Point mounted and configured immediately so instructors have internet.
-Please ensure it is secure so students cannot guess the password.
-
-Thanks,
-Suresh
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Resolution Box (Hidden initially) -->
-                    <div id="resolve-box" class="hidden bg-green-50 border border-green-200 rounded-lg p-4 shadow-sm animate-[fadeIn_0.3s_ease-out]">
-                        <h3 class="font-bold text-green-800 mb-2">Resolution Note</h3>
-                        <p class="text-xs text-green-700 mb-2">Document what you did to fix the issue. This will be emailed to the requester.</p>
-                        <textarea id="res-note" rows="4" class="w-full border border-green-300 rounded p-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 bg-white" placeholder="Example: Configured the new Access Point with SSID 'IRICEN_Classroom3' and WPA2 security..."></textarea>
-                        
-                        <div class="flex justify-end gap-2 mt-3">
-                            <button onclick="closeResolveBox()" class="px-3 py-1 bg-white border border-gray-300 text-gray-700 rounded text-sm hover:bg-gray-50 transition">Cancel</button>
-                            <button onclick="submitResolution()" class="px-4 py-1 bg-green-600 text-white rounded font-bold text-sm hover:bg-green-700 transition shadow-sm">Submit Resolution & Close</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Activity Log -->
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-700 mb-3 border-b border-slate-200 pb-1">Activity Log</h3>
-                        <div class="space-y-4" id="activity-log">
-                            <div class="flex gap-3 text-sm">
-                                <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center shrink-0">SP</div>
-                                <div>
-                                    <p class="text-slate-800 font-medium">Suresh Patil <span class="text-slate-400 font-normal text-xs ml-2">Today, 08:30 AM</span></p>
-                                    <p class="text-slate-600 mt-1">Ticket created.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </main>
-
+  <!-- PART 1: Golden Rule -->
+  <div class="section-card animate__animated animate__fadeInUp">
+    <div class="section-title">
+      <i class="fas fa-crown"></i>
+      <span>Part 1: The Golden Rule of IT Support</span>
     </div>
-
-    <!-- Success Toast -->
-    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-lg shadow-2xl font-medium opacity-0 transition-opacity duration-300 z-50 pointer-events-none flex items-center gap-2">
-        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-        Ticket #1045 Resolved Successfully!
+    <div class="golden-rule">
+      <i class="fas fa-exclamation-triangle" style="font-size: 2rem; float: right; opacity: 0.5;"></i>
+      <h3><i class="fas fa-ticket-alt"></i> "If it is not in a ticket, it did not happen."</h3>
+      <p><strong>Hallway Intercept Danger:</strong> Officer stops you → you fix printer for 1 hour → no ticket → manager sees "idle time".</p>
+      <p><strong>Solution:</strong> "I'd be happy to help! Please submit a quick ticket so I can track the hardware issue — I'll come right over."</p>
     </div>
+    <div class="two-columns">
+      <div class="info-card"><i class="fas fa-check-circle" style="color:#2c7da0;"></i> <strong>Proof of Work</strong> — shows your contractor & client your value</div>
+      <div class="info-card"><i class="fas fa-chart-line"></i> <strong>Inventory Tracking</strong> — identifies failing hardware trends</div>
+      <div class="info-card"><i class="fas fa-database"></i> <strong>Knowledge Base</strong> — search old tickets for repeat fixes</div>
+    </div>
+  </div>
 
-    <script>
-        // Data State
-        let currentTicketId = null;
-        let isAssigned = false;
+  <!-- PART 2: Ticket Lifecycle -->
+  <div class="section-card animate__animated animate__fadeInUp">
+    <div class="section-title">
+      <i class="fas fa-sync-alt"></i>
+      <span>Part 2: The Ticket Lifecycle</span>
+    </div>
+    <div class="lifecycle-steps">
+      <div class="lifecycle-step"><div class="step-icon"><i class="fas fa-plus-circle"></i></div><span class="ticket-status status-new">NEW</span><br>User submits → general pool</div>
+      <div class="lifecycle-step"><div class="step-icon"><i class="fas fa-user-check"></i></div><span class="ticket-status status-progress">ASSIGNED</span><br>Manager/auto assigns to you</div>
+      <div class="lifecycle-step"><div class="step-icon"><i class="fas fa-spinner"></i></div><span class="ticket-status status-progress">IN PROGRESS</span><br>Start work → <strong>change status immediately</strong></div>
+      <div class="lifecycle-step"><div class="step-icon"><i class="fas fa-check-double"></i></div><span class="ticket-status status-resolved">RESOLVED</span><br>Fixed + note → user confirmation window</div>
+      <div class="lifecycle-step"><div class="step-icon"><i class="fas fa-archive"></i></div><span class="ticket-status status-closed">CLOSED</span><br>Permanent final state</div>
+    </div>
+    <div class="info-card" style="background:#eef3fa;">
+      <i class="fas fa-lightbulb"></i> <strong>Pro Move:</strong> Change status to "In Progress" the moment you walk to the user's desk. SLA timer pauses/updates, user knows they're not ignored.
+    </div>
+  </div>
 
-        // UI Functions
-        function openTicket(id) {
-            currentTicketId = id;
-            
-            // For simulator purposes, if it's not 1045, tell them wrong ticket
-            if(id !== '1045') {
-                alert("Mission Alert: Focus on Ticket #1045 first! The Classroom 3 Wi-Fi is critical.");
-                return;
-            }
+  <!-- PART 3: SLA - The Ticking Clock -->
+  <div class="section-card animate__animated animate__fadeInUp">
+    <div class="section-title">
+      <i class="fas fa-hourglass-half"></i>
+      <span>Part 3: The Ticking Clock (SLA)</span>
+    </div>
+    <div class="sla-card">
+      <i class="fas fa-gavel"></i> <strong>SLA = Service Level Agreement</strong> — legally agreed resolution timeframe.<br>
+      <div style="display: flex; gap: 1rem; margin-top: 0.8rem; flex-wrap: wrap;">
+        <span><i class="fas fa-mouse"></i> Low Priority: "New mouse" → <strong>48 hours</strong></span>
+        <span><i class="fas fa-chalkboard-teacher"></i> High Priority: "Projector dead, class in 10 min" → <strong>1 hour</strong></span>
+      </div>
+      <p style="margin-top: 0.6rem;"><i class="fas fa-bell"></i> Miss SLA → ticket turns red → manager alert → contractor can be <strong>fined</strong>. Always watch your timers.</p>
+    </div>
+  </div>
 
-            const modal = document.getElementById('ticket-modal');
-            modal.classList.remove('translate-x-full');
-            
-            // Reset state if reopened
-            if(!isAssigned) {
-                document.getElementById('btn-assign').classList.remove('hidden');
-                document.getElementById('btn-resolve').classList.add('hidden');
-            }
+  <!-- PART 4: Art of Resolution Note -->
+  <div class="section-card animate__animated animate__fadeInUp">
+    <div class="section-title">
+      <i class="fas fa-pen-alt"></i>
+      <span>Part 4: The Art of the Resolution Note</span>
+    </div>
+    <div class="note-comparison">
+      <div class="bad-note"><i class="fas fa-times-circle" style="color:#e74c3c;"></i> <strong>Bad Note:</strong> "Fixed it."<br><span style="font-size:0.85rem;">(Helps no one later)</span></div>
+      <div class="bad-note"><i class="fas fa-user-slash"></i> <strong>Terrible:</strong> "User is clueless."<br><span style="font-size:0.85rem;">(User sees this!)</span></div>
+      <div class="good-note"><i class="fas fa-check-circle" style="color:#2ecc71;"></i> <strong>Great Note:</strong> "Found RJ45 cable unplugged from wall socket. Reconnected, verified green link lights on switch, successfully pinged server. User confirmed internet working."</div>
+    </div>
+    <div class="info-card" style="background:#e8f0fe;">
+      <i class="fas fa-book"></i> <strong>Resolution Note Formula:</strong> What you found + What you did + Verification + User confirmation.
+    </div>
+  </div>
+
+  <!-- WHERE TO LEARN MORE -->
+  <div class="section-card">
+    <div class="section-title">
+      <i class="fab fa-youtube"></i>
+      <span>Learn More: ITSM & Ticketing Systems</span>
+    </div>
+    <div>
+      <a href="#" id="kevtechTicketing" class="yt-card" target="_blank"><i class="fab fa-youtube"></i> Kevtech IT Support · Ticketing System for Helpdesk</a>
+      <a href="#" id="jobskillshareTicketing" class="yt-card" target="_blank"><i class="fab fa-youtube"></i> Jobskillshare · Helpdesk Ticketing Lifecycle</a>
+    </div>
+    <div style="background:#eef2fa; border-radius: 1rem; padding: 1rem; margin-top: 1rem;">
+      <i class="fas fa-graduation-cap"></i> <strong>Concepts to Google:</strong> "ITIL Basics", "Incident Management vs Service Request" — understanding ITIL framework makes you sound like a senior engineer.
+    </div>
+  </div>
+
+  <!-- INTERACTIVE QUIZ: LEVEL 6 -->
+  <div class="section-card quiz-area">
+    <div class="section-title" style="border-left-color: #e67e22;">
+      <i class="fas fa-brain"></i>
+      <span>Quick Quiz: Level 6 (Helpdesk & Ticketing)</span>
+    </div>
+    <p><strong>Test your ITSM knowledge.</strong> Click any question to reveal the answer.</p>
+    
+    <div id="quizLevel6">
+      <!-- Q1: SLA -->
+      <div class="quiz-question" data-answer="Service Level Agreement — legally agreed resolution time. If breached, contractor faces penalties and reputation damage.">
+        <div class="quiz-q-text">
+          <span><i class="far fa-question-circle"></i> <strong>Q1:</strong> What does SLA stand for, and why is it important to your contracting company?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="quiz-answer">
+          <p><i class="fas fa-check-circle" style="color:#2e7d32;"></i> <strong>Answer:</strong> Service Level Agreement — the time limit to fix issues. Breaches cause financial penalties and damage contractor reputation.</p>
+        </div>
+      </div>
+      <!-- Q2: Hallway intercept -->
+      <div class="quiz-question" data-answer="Politely ask them to submit a ticket first so work can be tracked, prioritized, and SLA monitored.">
+        <div class="quiz-q-text">
+          <span><i class="far fa-question-circle"></i> <strong>Q2:</strong> A user stops you in the hallway asking for a quick fix. Professional way to handle this?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="quiz-answer">
+          <p><i class="fas fa-check-circle" style="color:#2e7d32;"></i> <strong>Answer:</strong> "Please submit a ticket so I can track the work properly and meet SLA commitments."</p>
+        </div>
+      </div>
+      <!-- Q3: Resolved vs Closed -->
+      <div class="quiz-question" data-answer="Resolved = engineer fixed, user has verification window (3-5 days). Closed = permanent final state, no further work.">
+        <div class="quiz-q-text">
+          <span><i class="far fa-question-circle"></i> <strong>Q3:</strong> Difference between marking a ticket "Resolved" versus "Closed"?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="quiz-answer">
+          <p><i class="fas fa-check-circle" style="color:#2e7d32;"></i> <strong>Answer:</strong> Resolved = fix done, awaiting user confirmation. Closed = ticket is permanently finished.</p>
+        </div>
+      </div>
+      <!-- Q4: Resolution note example -->
+      <div class="quiz-question" data-answer="Professional, detailed: 'Restarted Print Spooler service, cleared stuck queue, printed test page. Issue resolved.'">
+        <div class="quiz-q-text">
+          <span><i class="far fa-question-circle"></i> <strong>Q4:</strong> You fixed a frozen print spooler. What should resolution note say?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="quiz-answer">
+          <p><i class="fas fa-check-circle" style="color:#2e7d32;"></i> <strong>Answer:</strong> "Restarted Print Spooler via services.msc, cleared stuck queue, printed test page. User confirmed printer working."</p>
+        </div>
+      </div>
+      <!-- Q5: In Progress status importance -->
+      <div class="quiz-question" data-answer="Pauses/updates SLA timer, notifies manager and user you're actively working, prevents frustration.">
+        <div class="quiz-q-text">
+          <span><i class="far fa-question-circle"></i> <strong>Q5:</strong> Why change ticket status to "In Progress" as soon as you start working?</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="quiz-answer">
+          <p><i class="fas fa-check-circle" style="color:#2e7d32;"></i> <strong>Answer:</strong> It pauses SLA timer, shows active work, and reassures user their issue is being handled.</p>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+      <button id="resetQuizBtn6" class="btn-primary"><i class="fas fa-sync-alt"></i> Collapse All Answers</button>
+    </div>
+    <hr>
+    <p><i class="fas fa-check-double"></i> <strong>Level 6 Complete:</strong> You now understand the golden rule, ticket lifecycle, SLA urgency, and professional resolution notes. Next: Advanced troubleshooting workflows & escalation paths.</p>
+  </div>
+  <footer>
+    <i class="fas fa-ticket-alt"></i> Level 6: Helpdesk & Ticketing — "No ticket, no work." Always watch SLA, write great notes.
+  </footer>
+</div>
+
+<script>
+  // Accordion quiz for Level 6
+  const quizLevel6Items = document.querySelectorAll('#quizLevel6 .quiz-question');
+  
+  function toggleAnswerHelpdesk(questionDiv) {
+    const answerDiv = questionDiv.querySelector('.quiz-answer');
+    if (!answerDiv) return;
+    answerDiv.classList.toggle('show');
+    const icon = questionDiv.querySelector('.fas.fa-chevron-down');
+    if (icon) {
+      if (answerDiv.classList.contains('show')) {
+        icon.style.transform = 'rotate(180deg)';
+      } else {
+        icon.style.transform = 'rotate(0deg)';
+      }
+    }
+  }
+  
+  quizLevel6Items.forEach(q => {
+    q.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleAnswerHelpdesk(q);
+    });
+    const icon = q.querySelector('.fas.fa-chevron-down');
+    if (icon) icon.style.transition = 'transform 0.2s';
+  });
+  
+  const resetBtn6 = document.getElementById('resetQuizBtn6');
+  if (resetBtn6) {
+    resetBtn6.addEventListener('click', () => {
+      quizLevel6Items.forEach(q => {
+        const ansDiv = q.querySelector('.quiz-answer');
+        if (ansDiv && ansDiv.classList.contains('show')) {
+          ansDiv.classList.remove('show');
+          const icon = q.querySelector('.fas.fa-chevron-down');
+          if (icon) icon.style.transform = 'rotate(0deg)';
         }
-
-        function closeTicket() {
-            const modal = document.getElementById('ticket-modal');
-            modal.classList.add('translate-x-full');
-            closeResolveBox();
-        }
-
-        function assignToMe() {
-            isAssigned = true;
-            
-            // Update UI Buttons
-            document.getElementById('btn-assign').classList.add('hidden');
-            document.getElementById('btn-resolve').classList.remove('hidden');
-            
-            // Update Modal Badge
-            const modalBadge = document.getElementById('modal-badge');
-            modalBadge.className = 'status-badge status-progress';
-            modalBadge.innerText = 'In Progress';
-            
-            // Update List Badge
-            const listBadge = document.getElementById('badge-1045');
-            listBadge.className = 'status-badge status-progress';
-            listBadge.innerText = 'In Progress';
-            
-            // Update Activity Log
-            const log = document.getElementById('activity-log');
-            log.innerHTML += `
-                <div class="flex gap-3 text-sm animate-[fadeIn_0.3s_ease-out]">
-                    <div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">RE</div>
-                    <div>
-                        <p class="text-slate-800 font-medium">Resident Engineer <span class="text-slate-400 font-normal text-xs ml-2">Just now</span></p>
-                        <p class="text-blue-600 font-medium mt-1">Status changed from New to In Progress.</p>
-                    </div>
-                </div>
-            `;
-            
-            // Update Side Counters
-            document.getElementById('count-unassigned').innerText = '2';
-            document.getElementById('count-mine').innerText = '1';
-        }
-
-        function openResolveBox() {
-            document.getElementById('resolve-box').classList.remove('hidden');
-            document.getElementById('res-note').focus();
-        }
-
-        function closeResolveBox() {
-            document.getElementById('resolve-box').classList.add('hidden');
-            document.getElementById('res-note').value = '';
-        }
-
-        function submitResolution() {
-            const note = document.getElementById('res-note').value.trim();
-            
-            if (note.length < 10) {
-                alert("Please write a detailed resolution note (at least 10 characters). Explain what you did.");
-                return;
-            }
-
-            // Close Modal
-            closeTicket();
-            
-            // Update List Row
-            const row = document.getElementById('row-1045');
-            row.classList.add('opacity-50', 'bg-green-50');
-            row.style.pointerEvents = 'none'; // disable clicking
-            
-            const listBadge = document.getElementById('badge-1045');
-            listBadge.className = 'status-badge status-resolved';
-            listBadge.innerText = 'Resolved';
-            
-            // Update Counters
-            document.getElementById('count-mine').innerText = '0';
-            document.getElementById('count-resolved').innerText = '13';
-
-            // Show Toast
-            const toast = document.getElementById('toast');
-            toast.classList.remove('opacity-0');
-            setTimeout(() => {
-                toast.classList.add('opacity-0');
-            }, 4000);
-        }
-    </script>
+      });
+    });
+  }
+  
+  // YouTube Links
+  const kevtechTick = document.getElementById('kevtechTicketing');
+  const jobskillTick = document.getElementById('jobskillshareTicketing');
+  if (kevtechTick) {
+    kevtechTick.href = "https://www.youtube.com/results?search_query=Kevtech+IT+Support+Ticketing+System+Helpdesk";
+    kevtechTick.setAttribute('title', 'Kevtech ticketing system walkthrough');
+  }
+  if (jobskillTick) {
+    jobskillTick.href = "https://www.youtube.com/results?search_query=Jobskillshare+Helpdesk+Ticketing+Lifecycle";
+    jobskillTick.setAttribute('title', 'Jobskillshare ticket lifecycle');
+  }
+  
+  console.log("%c🎫 Level 6: ITSM & Ticketing Loaded | Golden Rule: Ticket or it didn't happen", "color: #2c7da0; font-size: 13px; font-weight: bold;");
+  console.log("💡 Always write resolution notes with: Discovery + Action + Verification + User confirmation.");
+  
+  const extraStyle = document.createElement('style');
+  extraStyle.textContent = `
+    .quiz-question .fas.fa-chevron-down { transition: transform 0.25s ease; }
+    .quiz-answer { transition: max-height 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1), padding 0.2s; }
+    .lifecycle-step, .info-card { transition: transform 0.2s; }
+  `;
+  document.head.appendChild(extraStyle);
+</script>
 </body>
 </html>
